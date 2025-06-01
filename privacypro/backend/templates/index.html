@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrivacyGuard - Control Your Digital Privacy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>PrivacyGuard</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#reviews">Reviews</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="{{ url_for('login_page') }}" class="btn btn-outline">Log in</a>
+                <a href="{{ url_for('sign_up_page') }}" class="btn btn-primary">Sign up</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Take Control of Your Privacy Easily</h1>
+                <p>Built‑in apps on your phone can peek at your camera, mic or location without you knowing. PrivacyGuard watches for you, sends easy‑to‑understand alerts, and lets you turn any permission on or off in one tap.</p>
+                <div class="hero-buttons">
+                    <a href="{{url_for('sign_up_page')}}" class="btn btn-primary">
+                        Get Started
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#features" class="btn btn-outline">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-grid">
+                    <div class="image-box box1"></div>
+                    <div class="image-box box2"></div>
+                    <div class="image-box box3"></div>
+                    <div class="image-box box4"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h3>Real‑Time Notifications</h3>
+                    <p>Get instant visibility into which default apps are accessing your sensitive data and when they're doing it.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <h3>Behavioral Nudges</h3>
+                    <p>Sends gentle reminders and tips so you don’t forget to review or tighten your settings.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3>Dynamic Permission Control</h3>
+                    <p>Take control with intuitive tools to review and modify app permissions based on risk assessment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="benefits">
+        <div class="container">
+            <h2>Benefits</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-number">#1</div>
+                    <h3>Enhanced Privacy</h3>
+                    <p>Prevent unwanted data collection and protect your personal information from unnecessary access.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-number">#2</div>
+                    <h3>Effortless Control</h3>
+                    <p>Flip permissions on or off with a single tap—no digging through menus or tech jargon.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-number">#3</div>
+                    <h3>Smart Reminders</h3>
+                    <p>Receive friendly suggestions and tips so you never forget to review or tighten your settings.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews">
+        <div class="container">
+            <h2>Our Reviews</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="avatar">AA</div>
+                        <h4>Abubakar Abdulkadir</h4>
+                    </div>
+                    <p>"PrivacyGuard helped me discover that my weather app was accessing my location hundreds of times a day, even when I wasn't using it!"</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="avatar">SY</div>
+                        <h4>Shepherd Yang</h4>
+                    </div>
+                    <p>"As someone who values privacy, this tool has been invaluable. The real-time alerts make me feel more in control of my personal data."</p>
+                </div>
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="avatar">AA</div>
+                        <h4>Asmau Adeniran</h4>
+                    </div>
+                    <p>"I was shocked to learn how many default apps had unnecessary permissions. PrivacyGuard made it easy to fix this and improve my battery life too."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>PrivacyGuard</span>
+                    </div>
+                    <p>Air-Force Institute of Technology, Kaduna<br>NAF Base, Nigeria</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Podcast</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Jobs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Get Help</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policies</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <div class="newsletter">
+                        <input type="email" placeholder="Enter your email address">
+                        <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                    <h4>Socials</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                2025 PrivacyGuard. All rights reserved
+            </div>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+</body>
+</html>

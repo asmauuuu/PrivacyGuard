@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "username": "Adeniran Asmau",
+    "email": "asmauadeniran2004@gmail.com",
+    "password": "Yetunde2004",
+    "is_admin": false,
+    "email_verified": false,
+    "created_at": "2025-05-11T16:41:56.675961"
+  },
+  {
+    "id": 2,
+    "username": "Mubarak Adedeji",
+    "email": "adedejimubarakadesola@gmail.com",
+    "password": "12345678",
+    "is_admin": false,
+    "email_verified": false,
+    "created_at": "2025-05-11T16:52:09.109759"
+  }
+]

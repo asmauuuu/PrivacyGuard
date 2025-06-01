@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrivacyGuard - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+            <span>PrivacyGuard</span>
+        </div>
+        <div class="header-actions">
+            <button class="icon-button">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-button">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="icon-button">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="search-container">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search by app name...">
+            </div>
+        </div>
+
+        <section class="welcome-section">
+            <h1>Welcome back <span id="username">User</span></h1>
+            <p>Here's your privacy summary</p>
+        </section>
+
+        <section class="apps-section">
+            <h2>All apps</h2>
+            <div class="app-grid">
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <p>Phone</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <p>Phone</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <p>Phone</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <p>Phone</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <p>Phone</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="suggestions-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h2>Suggestions</h2>
+            </div>
+            
+            <div class="suggestion-cards">
+                <div class="suggestion-card">
+                    <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
+                    <div class="suggestion-actions">
+                        <button class="btn-small">Review</button>
+                        <button class="btn-small btn-outline">Dismiss</button>
+                        <button class="btn-small btn-outline">Snooze</button>
+                    </div>
+                </div>
+                
+                <div class="suggestion-card">
+                    <p>You haven't checked your app permissions in more than a week. Let us help you stay on top.</p>
+                    <div class="suggestion-actions">
+                        <button class="btn-small">Review</button>
+                        <button class="btn-small btn-outline">Dismiss</button>
+                        <button class="btn-small btn-outline">Snooze</button>
+                    </div>
+                </div>
+                
+                <div class="suggestion-card">
+                    <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
+                    <div class="suggestion-actions">
+                        <button class="btn-small">Review</button>
+                        <button class="btn-small btn-outline">Dismiss</button>
+                        <button class="btn-small btn-outline">Snooze</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="graph-section">
+            <div class="section-header">
+                <h2>Bar graph</h2>
+            </div>
+            <div class="chart-container">
+                <canvas id="privacyChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <footer class="dashboard-footer">
+        <div class="footer-section">
+            <h3>Privacy Pro</h3>
+            <p>123 Privacy Street, Suite #201</p>
+            <p>San Francisco, CA 94105</p>
+            <p>USA</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Company</h3>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Product</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Jobs</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Get Help</h3>
+            <ul>
+                <li><a href="#">Privacy policies</a></li>
+                <li><a href="#">Product support</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Newsletter</h3>
+            <div class="newsletter-form">
+                <input type="email" placeholder="Enter your email address">
+                <button class="btn-small">Subscribe</button>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+    
+    <div class="copyright">
+        <p>© 2023 Privacy Pro. All rights reserved.</p>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="dashboard.js"></script>
+    
+</body>
+</html>

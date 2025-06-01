@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrivacyGuard - Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>PrivacyGuard</span>
+            </div>
+            <div class="nav-buttons">
+                <a href="{{ url_for('sign_up_page') }}" class="btn btn-outline">Sign up</a>
+                <a href="{{ url_for('login_page') }}" class="btn btn-dark">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <h1>Sign Up</h1>
+            <form id="signupForm" method="post" action="http://localhost:5000/sign-up">
+                <div class="form-group">
+                    <label for="fullName">
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input type="text" id="fullName" placeholder="Full Name" required name="full_name">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">
+                        <i class="fas fa-envelope"></i>
+                    </label>
+                    <input type="email" id="signupEmail" placeholder="Email address" required name="signup_email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="signupPassword" placeholder="Password" required name="signup_pwd">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required name="confirm_pwd">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Click the login button</a></p>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+
+    <script>
+        // document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        //     e.preventDefault();
+
+        //     const name = document.getElementById('fullName').value.trim();
+        //     const email = document.getElementById('signupEmail').value.trim();
+        //     const password = document.getElementById('signupPassword').value.trim();
+
+        //     try {
+        //         const response = await fetch('http://localhost:5500/api/auth/register', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({ name, email, password })
+        //         });
+
+        //         const data = await response.json();
+        //         if (response.ok) {
+        //             alert(data.message + '\nCheck your email for the verification code.');
+        //             // Optionally redirect or show verification form
+        //         } else {
+        //             alert(data.error || 'Registration failed');
+        //         }
+        //     } catch (error) {
+        //         console.error('Error:', error);
+        //         alert('An error occurred. Please try again later.');
+        //     }
+        // });
+    </script>
+
+</body>
+
+</html>

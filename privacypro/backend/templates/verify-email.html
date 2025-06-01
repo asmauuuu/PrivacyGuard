@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - Privacy Framework</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .verification-container {
+            max-width: 400px;
+            margin: 3rem auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        
+        .verification-container h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .verification-container p {
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #555;
+        }
+        
+        .verification-code {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .verification-code input {
+            width: 3rem;
+            height: 3rem;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .verification-code input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .resend-link {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .resend-link a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .countdown {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>Privacy Framework</span>
+            </div>
+            <div class="nav-buttons">
+                <a href="signup.html" class="btn btn-outline">Sign up</a>
+                <a href="login.html" class="btn btn-dark">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="verification-container">
+            <h1>Verify Your Email</h1>
+            <p>We've sent a 6-digit verification code to your email. Please enter it below to verify your account.</p>
+            
+            <form id="verificationForm">
+                <div class="verification-code">
+                    <input type="text" maxlength="1" pattern="[0-9]" required>
+                    <input type="text" maxlength="1" pattern="[0-9]" required>
+                    <input type="text" maxlength="1" pattern="[0-9]" required>
+                    <input type="text" maxlength="1" pattern="[0-9]" required>
+                    <input type="text" maxlength="1" pattern="[0-9]" required>
+                    <input type="text" maxlength="1" pattern="[0-9]" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Verify Email</button>
+            </form>
+            
+            <div class="resend-link">
+                <p>Didn't receive the code? <a href="#" id="resendCode">Resend Code</a></p>
+            </div>
+            
+            <div class="countdown" id="countdown" style="display: none;">
+                You can request a new code in <span id="timer">30</span> seconds
+            </div>
+        </div>
+    </main>
+
+    <script src="js/verify-email.js"></script>
+</body>
+</html>
