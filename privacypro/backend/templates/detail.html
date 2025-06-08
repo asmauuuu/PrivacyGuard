@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>PrivacyGuard – Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .detail-main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      color: #007bff;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .back-btn i {
+      margin-right: 0.5rem;
+    }
+    .detail-header h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .detail-section {
+      margin-top: 2rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    .detail-section h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+    .detail-section p, .detail-section ul {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      color: #444;
+    }
+    .detail-section ul {
+      list-style: disc inside;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- same header as dashboard -->
+  <header class="dashboard-header">
+    <div class="logo">
+      <i class="fas fa-shield-alt"></i>
+      <span>PrivacyGuard</span>
+    </div>
+    <div class="header-actions">
+      <!-- back arrow goes to dashboard_page -->
+      <a href="{{ url_for('dashboard_page') }}" class="icon-button" title="Back to Dashboard">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <button class="icon-button">
+        <i class="fas fa-cog"></i>
+      </button>
+      <button class="icon-button">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="detail-main">
+    <!-- Go back link -->
+    <a href="{{ url_for('dashboard_page') }}" class="back-btn">
+      <i class="fas fa-chevron-left"></i> Go back to Dashboard
+    </a>
+
+    <!-- Message title & short description -->
+    <section class="detail-header">
+      <h1>{{ message.title or 'Permission Detail' }}</h1>
+      <p class="subtitle">{{ message.content[:200] or 'Detailed explanation of this permission and its implications.' }}</p>
+    </section>
+
+    <!-- What does this permission mean? -->
+    <section class="detail-section">
+      <h2>What does this mean?</h2>
+      <p>
+        This permission allows the app to access your <strong>sensitive data</strong>. 
+        When granted, the app can read or record this information even when you’re not actively using it.
+      </p>
+      <p>
+        For example, if this is a microphone permission, the app could record audio in the background.
+        If it’s location, the app can track your movements over time.
+      </p>
+    </section>
+
+    <!-- Why you might want to revoke or review -->
+    <section class="detail-section">
+      <h2>Why review?</h2>
+      <ul>
+        <li>Unused permissions are a potential privacy risk.</li>
+        <li>Apps with permissions they don’t need can be exploited by malicious code.</li>
+        <li>Revoking unnecessary permissions helps minimize data collection.</li>
+      </ul>
+    </section>
+
+    <!-- Recommended next steps -->
+    <section class="detail-section">
+      <h2>Recommended action</h2>
+      <p>
+        We recommend you review this permission in your device settings. 
+        If you don’t use this feature frequently, you can safely disable it now and re-enable later if needed.
+      </p>
+ 
+    </section>
+  </main>
+</body>
+</html>

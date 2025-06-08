@@ -1,176 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PrivacyGuard - Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrivacyGuard - Dashboard</title>
+
+  <!-- Your existing CSS files -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+  <!-- Font Awesome & Chart.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* Alerts sidebar & hamburger inline styles (unchanged) */
+    .hidden { display: none; }
+    #alerts-wrapper {
+      position: fixed;
+      top: 0; right: 0;
+      width: 320px; height: 100%;
+      background: #fff;
+      box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+      overflow-y: auto;
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    #alerts-wrapper.open {
+      transform: translateX(0);
+    }
+    #alerts-wrapper .close-alerts {
+      background: none; border: none;
+      font-size: 1.25rem; float: right;
+      margin: 1rem; cursor: pointer;
+    }
+    #alerts-wrapper .alerts { padding: 1rem; }
+    #alerts-wrapper .alert-item {
+      background: #f1f1f1; border-radius: 8px;
+      padding: 1rem; margin-bottom: 1rem;
+    }
+    #alerts-wrapper .alert-actions button { margin-right: 0.5rem; }
+
+    /* Hamburger menu panel */
+    #hamburgerMenu {
+      position: absolute; top: 60px; right: 10px;
+      background: #fff; border: 1px solid #ddd;
+      border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      z-index: 1001; width: 160px; padding: 8px 0;
+    }
+    #hamburgerMenu.hidden { display: none; }
+    #hamburgerMenu ul { list-style: none; margin: 0; padding: 0; }
+    #hamburgerMenu li { padding: 8px 16px; border-bottom: 1px solid #eee; }
+    #hamburgerMenu li:last-child { border-bottom: none; }
+    #hamburgerMenu a {
+      text-decoration: none; color: #333;
+      display: block; font-weight: 500;
+    }
+    #hamburgerMenu a:hover { color: #007BFF; }
+  </style>
 </head>
 <body>
-    <header class="dashboard-header">
-        <div class="logo">
-            <i class="fas fa-shield-alt"></i>
-            <span>PrivacyGuard</span>
-        </div>
-        <div class="header-actions">
-            <button class="icon-button">
-                <i class="fas fa-bell"></i>
-            </button>
-            <button class="icon-button">
-                <i class="fas fa-cog"></i>
-            </button>
-            <button class="icon-button">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </header>
+  <!-- HEADER -->
+  <header class="dashboard-header">
+    <div class="logo">
+      <i class="fas fa-shield-alt"></i>
+      <span>PrivacyGuard</span>
+    </div>
+    <div class="header-actions">
+      <button id="btn-notif" class="icon-button"><i class="fas fa-bell"></i></button>
+      <button id="hamburgerToggle" class="icon-button"><i class="fas fa-bars"></i></button>
+      <div id="hamburgerMenu" class="hidden">
+        <ul>
+          <li><a href="#">Help</a></li>
+          <li><a href="#">Settings</a></li>
+          <li><a href="{{ url_for('login_page') }}">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
 
-    <main class="dashboard-main">
-        <div class="search-container">
-            <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search by app name...">
-            </div>
-        </div>
-
-        <section class="welcome-section">
-            <h1>Welcome back <span id="username">User</span></h1>
-            <p>Here's your privacy summary</p>
-        </section>
-
-        <section class="apps-section">
-            <h2>All apps</h2>
-            <div class="app-grid">
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <p>Phone</p>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <p>Phone</p>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <p>Phone</p>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <p>Phone</p>
-                </div>
-                <div class="app-card">
-                    <div class="app-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <p>Phone</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="suggestions-section">
-            <div class="section-header">
-                <div class="section-icon">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <h2>Suggestions</h2>
-            </div>
-            
-            <div class="suggestion-cards">
-                <div class="suggestion-card">
-                    <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
-                    <div class="suggestion-actions">
-                        <button class="btn-small">Review</button>
-                        <button class="btn-small btn-outline">Dismiss</button>
-                        <button class="btn-small btn-outline">Snooze</button>
-                    </div>
-                </div>
-                
-                <div class="suggestion-card">
-                    <p>You haven't checked your app permissions in more than a week. Let us help you stay on top.</p>
-                    <div class="suggestion-actions">
-                        <button class="btn-small">Review</button>
-                        <button class="btn-small btn-outline">Dismiss</button>
-                        <button class="btn-small btn-outline">Snooze</button>
-                    </div>
-                </div>
-                
-                <div class="suggestion-card">
-                    <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
-                    <div class="suggestion-actions">
-                        <button class="btn-small">Review</button>
-                        <button class="btn-small btn-outline">Dismiss</button>
-                        <button class="btn-small btn-outline">Snooze</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="graph-section">
-            <div class="section-header">
-                <h2>Bar graph</h2>
-            </div>
-            <div class="chart-container">
-                <canvas id="privacyChart"></canvas>
-            </div>
-        </section>
-    </main>
-
-    <footer class="dashboard-footer">
-        <div class="footer-section">
-            <h3>Privacy Pro</h3>
-            <p>123 Privacy Street, Suite #201</p>
-            <p>San Francisco, CA 94105</p>
-            <p>USA</p>
-        </div>
-        
-        <div class="footer-section">
-            <h3>Company</h3>
-            <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Product</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Jobs</a></li>
-            </ul>
-        </div>
-        
-        <div class="footer-section">
-            <h3>Get Help</h3>
-            <ul>
-                <li><a href="#">Privacy policies</a></li>
-                <li><a href="#">Product support</a></li>
-            </ul>
-        </div>
-        
-        <div class="footer-section">
-            <h3>Newsletter</h3>
-            <div class="newsletter-form">
-                <input type="email" placeholder="Enter your email address">
-                <button class="btn-small">Subscribe</button>
-            </div>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-            </div>
-        </div>
-    </footer>
-    
-    <div class="copyright">
-        <p>© 2023 Privacy Pro. All rights reserved.</p>
+  <!-- MAIN CONTENT -->
+  <main class="dashboard-main">
+    <!-- SEARCH -->
+    <div class="search-container">
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input id="appSearch" type="text" placeholder="Search by app name...">
+      </div>
     </div>
 
-    <script src="api.js"></script>
-    <script src="dashboard.js"></script>
-    
+    <!-- WELCOME -->
+    <section class="welcome-section">
+      <h1>Welcome back <span id="username">User</span></h1>
+      <p class="subtitle">Here's your privacy summary</p>
+    </section>
+
+    <!-- APPS GRID -->
+    <section class="apps-section">
+      <h2>All apps</h2>
+      <div id="appGrid" class="app-grid">
+        <!-- First row: always visible -->
+        <div class="app-card" data-name="Phone">
+          <div class="app-icon"><i class="fas fa-phone"></i></div><p>Phone</p>
+        </div>
+        <div class="app-card" data-name="Messages">
+          <div class="app-icon"><i class="fas fa-comment-alt"></i></div><p>Messages</p>
+        </div>
+        <div class="app-card" data-name="Camera">
+          <div class="app-icon"><i class="fas fa-camera"></i></div><p>Camera</p>
+        </div>
+        <!-- Second row: hidden by default -->
+        <div class="app-card extra" data-name="Contacts">
+          <div class="app-icon"><i class="fas fa-address-book"></i></div><p>Contacts</p>
+        </div>
+        <div class="app-card extra" data-name="Browser">
+          <div class="app-icon"><i class="fas fa-globe"></i></div><p>Browser</p>
+        </div>
+        <div class="app-card extra" data-name="Photos">
+          <div class="app-icon"><i class="fas fa-image"></i></div><p>Photos</p>
+        </div>
+      </div>
+      <button id="toggleMore" class="btn-toggle">Show more</button>
+    </section>
+
+    <!-- SUGGESTIONS -->
+    <section class="suggestions-section">
+      <div class="section-header">
+        <div class="section-icon"><i class="fas fa-lightbulb"></i></div><h2>Suggestions</h2>
+      </div>
+      <div class="suggestion-cards">
+        <div class="suggestion-card">
+          <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
+          <div class="suggestion-actions">
+            <button class="btn-small">Review</button>
+            <button class="btn-small btn-outline">Dismiss</button>
+            <button class="btn-small btn-outline">Snooze</button>
+          </div>
+        </div>
+        <div class="suggestion-card">
+          <p>You haven't checked your app permissions in more than a week. Let us help you stay on top.</p>
+          <div class="suggestion-actions">
+            <button class="btn-small">Review</button>
+            <button class="btn-small btn-outline">Dismiss</button>
+            <button class="btn-small btn-outline">Snooze</button>
+          </div>
+        </div>
+        <div class="suggestion-card">
+          <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
+          <div class="suggestion-actions">
+            <button class="btn-small">Review</button>
+            <button class="btn-small btn-outline">Dismiss</button>
+            <button class="btn-small btn-outline">Snooze</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRAPH -->
+    <section class="graph-section">
+      <div class="section-header"><h2>Bar graph</h2></div>
+      <div class="chart-container"><canvas id="privacyChart"></canvas></div>
+    </section>
+
+    <!-- APP DETAIL PANEL -->
+    <div id="appDetail" class="app-detail-panel">
+      <div class="detail-header">
+        <button id="closeDetail" class="close-detail">&times;</button>
+        <div class="app-meta">
+          <div class="app-detail-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <h2 id="detailName">App Name</h2>
+            <span class="badge" id="detailRisk">Medium</span>
+            <div class="last-used">Last used: <span id="detailLastUsed">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="detail-body">
+        <!-- Permissions -->
+        <section class="detail-section">
+          <h3>Permissions</h3>
+          <ul id="permList" class="perm-list"></ul>
+        </section>
+        <!-- Usage History -->
+        <section class="detail-section">
+          <h3>Usage History</h3>
+          <canvas id="historyChart"></canvas>
+        </section>
+        <!-- Real-Time Monitoring -->
+        <section class="detail-section">
+          <h3>Real-Time Monitoring</h3>
+          <label class="switch">
+            <input id="liveAlertsToggle" type="checkbox"><span class="slider round"></span>
+          </label>
+          <span>Live Alerts</span>
+          <button id="nudgeBtn" class="btn-small">Nudge me in 7 days</button>
+        </section>
+        <!-- Data Flow -->
+        <section class="detail-section">
+          <h3>Data Flow</h3>
+          <p id="dataFlow">This app sends data to 3 external domains and pings your location every 30 min.</p>
+        </section>
+      </div>
+      <div class="detail-footer">
+        <button id="revokeAll" class="btn-small btn-outline">Revoke All</button>
+        <button id="grantAll" class="btn-small">Grant All</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="dashboard-footer">
+    <div class="footer-section">
+      <h3>PrivacyGuard</h3>
+      <p>Air-Force Institute of Technology, Kaduna</p>
+      <p>NAF Base, Nigeria</p>
+    </div>
+    <div class="footer-section">
+      <h3>Company</h3>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Product</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Jobs</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Get Help</h3>
+      <ul>
+        <li><a href="#">Privacy policies</a></li>
+        <li><a href="#">Product support</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Newsletter</h3>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email address">
+        <button class="btn-small">Subscribe</button>
+      </div>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+  <div class="copyright">
+    <p>© 2023 Privacy Pro. All rights reserved.</p>
+  </div>
+
+  <!-- ALERTS SIDEBAR -->
+  <div id="alerts-wrapper" class="hidden">
+    <div class="alerts">
+      <button id="btn-close-alerts" class="close-alerts" aria-label="Close Alerts">✕</button>
+      <h2>Alert</h2>
+      <div class="alert-item" data-id="101">
+        <strong>Messages</strong>
+        <p>This app is currently accessing your microphone. Do you wish to revoke its current permission status?</p>
+        <div class="alert-actions">
+          <button class="btn-small btn-yes" data-response="yes">Yes</button>
+          <button class="btn-small btn-no" data-response="no">No</button>
+          <a href="/detail/101" class="btn-small">Read more →</a>
+        </div>
+      </div>
+      <div class="alert-item" data-id="102">
+        <strong>Messages</strong>
+        <p>Safari has location access, but hasn’t been used in 30 days. Would you like to review this permission?</p>
+        <div class="alert-actions">
+          <button class="btn-small btn-yes" data-response="yes">Yes</button>
+          <button class="btn-small btn-no" data-response="no">No</button>
+          <a href="/detail/102" class="btn-small">Read more →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Toggle alerts sidebar
+    const btnNotif       = document.getElementById('btn-notif');
+    const alertsWrapper  = document.getElementById('alerts-wrapper');
+    const btnCloseAlerts = document.getElementById('btn-close-alerts');
+
+    btnNotif.addEventListener('click', () => {
+      alertsWrapper.classList.add('open'); alertsWrapper.classList.remove('hidden');
+    });
+    btnCloseAlerts.addEventListener('click', () => {
+      alertsWrapper.classList.remove('open'); setTimeout(() => alertsWrapper.classList.add('hidden'), 300);
+    });
+
+    // Alerts yes/no
+    document.querySelectorAll('.alert-actions .btn-yes, .alert-actions .btn-no')
+      .forEach(btn => btn.addEventListener('click', e => {
+        const id = e.target.closest('.alert-item').dataset.id;
+        fetch('/api/respond', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({msg_id:id, response: e.target.dataset.response})})
+          .then(r=>r.json()).then(()=>{
+            e.target.parentElement.querySelectorAll('button').forEach(b=>b.disabled=true);
+          });
+      }));
+
+    // Hamburger
+    const hamburgerToggle = document.getElementById('hamburgerToggle');
+    const hamburgerMenu   = document.getElementById('hamburgerMenu');
+    hamburgerToggle.addEventListener('click', () => hamburgerMenu.classList.toggle('hidden'));
+    window.addEventListener('click', e => { if(!hamburgerToggle.contains(e.target)&&!hamburgerMenu.contains(e.target)) hamburgerMenu.classList.add('hidden'); });
+
+    // Live search & toggle more
+    const searchInput = document.getElementById('appSearch');
+    const appCards    = Array.from(document.querySelectorAll('.app-card'));
+    const toggleBtn   = document.getElementById('toggleMore');
+
+    function collapseExtras() {document.querySelectorAll('.extra').forEach(e=>e.classList.add('hidden')); toggleBtn.textContent='Show more'; toggleBtn.classList.remove('expanded');}
+    function expandExtras()  {document.querySelectorAll('.extra').forEach(e=>e.classList.remove('hidden')); toggleBtn.textContent='Show less'; toggleBtn.classList.add('expanded');}
+    collapseExtras();
+
+    searchInput.addEventListener('input', ()=>{
+      const q=searchInput.value.trim().toLowerCase();
+      appCards.forEach(card=>{card.style.display=card.dataset.name.toLowerCase().includes(q)?'flex':'none';});
+      toggleBtn.style.display=q?'none':'block';
+      if(!q&&!toggleBtn.classList.contains('expanded')) collapseExtras();
+    });
+    toggleBtn.addEventListener('click', ()=>toggleBtn.classList.contains('expanded')?collapseExtras():expandExtras());
+
+    // App Detail Panel logic
+    const detailPanel = document.getElementById('appDetail');
+    const closeDetail = document.getElementById('closeDetail');
+    const appData = { /* sample data as before */ Phone:{risk:'Low', lastUsed:'Today, 10:32 AM', permissions:[{name:'Camera', icon:'fa-camera', granted:true, lastAccess:'1h ago'},{name:'Microphone', icon:'fa-microphone', granted:false, lastAccess:'—'},{name:'Contacts', icon:'fa-address-book', granted:true, lastAccess:'Yesterday'}], history:[2,5,3,4,6,1,0], dataFlow:'Sends crash logs to crash.example.com every launch.'} };
+    document.querySelectorAll('.app-card').forEach(card=>card.addEventListener('click',()=>{
+      const name=card.dataset.name, info=appData[name]; if(!info) return;
+      document.getElementById('detailName').textContent=name;
+      document.getElementById('detailRisk').textContent=info.risk;
+      document.getElementById('detailLastUsed').textContent=info.lastUsed;
+      document.querySelector('.app-detail-icon i').className=`fas ${card.querySelector('i').classList[1]}`;
+      const permList=document.getElementById('permList'); permList.innerHTML='';
+      info.permissions.forEach(p=>{const li=document.createElement('li');li.innerHTML=`<div><i class="fas ${p.icon}"></i> <span>${p.name}</span></div><div><label class="switch"><input type="checkbox" ${p.granted?'checked':''}><span class="slider round"></span></label><small>Last accessed: ${p.lastAccess}</small></div>`;permList.appendChild(li);});
+      const ctx=document.getElementById('historyChart').getContext('2d'); if(window._historyChart) window._historyChart.destroy(); window._historyChart=new Chart(ctx,{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Accesses',data:info.history}]},options:{maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}});
+      document.getElementById('dataFlow').textContent=info.dataFlow;
+      detailPanel.classList.add('show');
+    }));
+    closeDetail.addEventListener('click',()=>detailPanel.classList.remove('show'));
+  </script>
 </body>
 </html>

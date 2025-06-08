@@ -7,6 +7,19 @@ app = Flask(__name__)
 USERS_FILE = "./static/users.json" 
 VERIFICATION_FILE = './static/verification.json'
 
+MESSAGES = [
+    {
+        "id": 101,
+        "title": "Privacy Breach in Default Camera App",
+        "content": "A recent privacy concern was reported about the default camera app collecting location data without user consent. This has raised discussions about enforcing stricter permission models."
+    },
+    {
+        "id": 102,
+        "title": "Background Data Access Detected",
+        "content": "The default email app has been observed accessing data in the background. This access occurs even when the app is not in active use, raising concerns over transparency."
+    }
+]
+
 @app.route('/index', methods=['GET'])
 def landing_page():
     if request.method == 'GET':
@@ -76,5 +89,18 @@ def sign_up():
 def dashboard_page():
     if request.method == 'GET':
         return render_template('dashboard.html')
+
+        
+@app.route('/detail/<int:msg_id>')
+def detail(msg_id):
+    message = next((m for m in MESSAGES if m['id'] == msg_id), None)
+    if not message:
+        return "Message not found", 404
+    return render_template('detail.html', message=message)
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
