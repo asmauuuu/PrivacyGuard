@@ -3,343 +3,4074 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PrivacyGuard - Dashboard</title>
-
-  <!-- Your existing CSS files -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <title>PrivacyGuard - User-Centric Privacy Framework</title>
 
   <!-- Font Awesome & Chart.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* Alerts sidebar & hamburger inline styles (unchanged) */
-    .hidden { display: none; }
-    #alerts-wrapper {
-      position: fixed;
-      top: 0; right: 0;
-      width: 320px; height: 100%;
-      background: #fff;
-      box-shadow: -4px 0 12px rgba(0,0,0,0.1);
-      overflow-y: auto;
-      z-index: 1000;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-    }
-    #alerts-wrapper.open {
-      transform: translateX(0);
-    }
-    #alerts-wrapper .close-alerts {
-      background: none; border: none;
-      font-size: 1.25rem; float: right;
-      margin: 1rem; cursor: pointer;
-    }
-    #alerts-wrapper .alerts { padding: 1rem; }
-    #alerts-wrapper .alert-item {
-      background: #f1f1f1; border-radius: 8px;
-      padding: 1rem; margin-bottom: 1rem;
-    }
-    #alerts-wrapper .alert-actions button { margin-right: 0.5rem; }
+    /* Import Google Font */
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 
-    /* Hamburger menu panel */
-    #hamburgerMenu {
-      position: absolute; top: 60px; right: 10px;
-      background: #fff; border: 1px solid #ddd;
-      border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      z-index: 1001; width: 160px; padding: 8px 0;
+    :root {
+      --primary-color: #4f46e5;
+      --primary-light: #818cf8;
+      --primary-dark: #3730a3;
+      --secondary-color: #6366f1;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --bg-color: #f9fafb;
+      --card-bg: #ffffff;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --border-color: #e5e7eb;
+      --ai-gradient-start: #6366f1;
+      --ai-gradient-end: #8b5cf6;
     }
-    #hamburgerMenu.hidden { display: none; }
-    #hamburgerMenu ul { list-style: none; margin: 0; padding: 0; }
-    #hamburgerMenu li { padding: 8px 16px; border-bottom: 1px solid #eee; }
-    #hamburgerMenu li:last-child { border-bottom: none; }
-    #hamburgerMenu a {
-      text-decoration: none; color: #333;
-      display: block; font-weight: 500;
+
+    [data-theme="dark"] {
+      --bg-color: #111827;
+      --card-bg: #1f2937;
+      --text-primary: #f9fafb;
+      --text-secondary: #d1d5db;
+      --border-color: #374151;
+      --ai-gradient-start: #8b5cf6;
+      --ai-gradient-end: #6366f1;
     }
-    #hamburgerMenu a:hover { color: #007BFF; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .notification-badge {
+      position: relative;
+    }
+
+    .notification-badge::after {
+      content: attr(data-count);
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--danger-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* MAIN LAYOUT */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* PRIVACY SCORE */
+    .privacy-score-card {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .score-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      backdrop-filter: blur(10px);
+    }
+
+    .score-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .score-status {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .score-progress {
+      background: rgba(255, 255, 255, 0.3);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .score-progress-fill {
+      height: 100%;
+      background: white;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* APPS GRID */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-color);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+    }
+
+    .app-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2rem;
+      color: var(--primary-color);
+    }
+
+    .app-name {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .app-risk {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .risk-low { background: #d1fae5; color: #065f46; }
+    .risk-medium { background: #fef3c7; color: #92400e; }
+    .risk-high { background: #fee2e2; color: #b91c1c; }
+
+    .app-status {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--success-color);
+    }
+
+    .app-status.active {
+      background: var(--danger-color);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* APP DETAIL MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--border-color);
+    }
+
+    .permission-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--bg-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .permission-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .permission-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .permission-details h4 {
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .permission-details p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .permission-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* TOGGLE SWITCH */
+    .toggle {
+      position: relative;
+      width: 50px;
+      height: 24px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+
+    /* ACTIVITY TIMELINE */
+    .activity-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-time {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      min-width: 80px;
+    }
+
+    .activity-content {
+      flex: 1;
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-icon.risk-high { background: var(--danger-color); }
+    .activity-icon.risk-medium { background: var(--warning-color); }
+    .activity-icon.risk-low { background: var(--success-color); }
+
+    /* CHARTS */
+    .chart-container {
+      height: 300px;
+      position: relative;
+    }
+
+    /* NOTIFICATIONS */
+    .notification-panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: var(--card-bg);
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+      transition: right 0.3s ease;
+      z-index: 1001;
+      overflow-y: auto;
+    }
+
+    .notification-panel.active {
+      right: 0;
+    }
+
+    .notification-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .notification-item {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .notification-item:hover {
+      background: var(--bg-color);
+    }
+
+    .notification-item.unread {
+      background: rgba(79, 70, 229, 0.05);
+      border-left: 4px solid var(--primary-color);
+    }
+
+    /* BUTTONS */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--text-secondary);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--danger-color);
+      color: white;
+    }
+
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    /* ENCRYPTION STATUS */
+    .encryption-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border-radius: 8px;
+      font-size: 0.875rem;
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-card.highlight {
+      animation: highlight-pulse 2s;
+    }
+
+    @keyframes highlight-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* AI ASSISTANT */
+    .ai-assistant {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    .ai-toggle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ai-gradient-start) 0%, var(--ai-gradient-end) 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .ai-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    .ai-toggle.active {
+      transform: scale(1.1);
+    }
+
+    .ai-chat {
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      width: 350px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      max-height: 500px;
+    }
+
+    .ai-chat.active {
+      display: flex;
+    }
+
+    .ai-header {
+      background: linear-gradient(135deg, var(--ai-gradient-start) 0%, var(--ai-gradient-end) 100%);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ai-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+    }
+
+    .ai-close {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.25rem;
+    }
+
+    .ai-messages {
+      padding: 1rem;
+      overflow-y: auto;
+      flex: 1;
+      max-height: 350px;
+    }
+
+    .ai-message {
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .ai-message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ai-gradient-start) 0%, var(--ai-gradient-end) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .ai-message-content {
+      background: #f3f4f6;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border-top-left-radius: 0;
+      max-width: 80%;
+      color: var(--text-primary);
+    }
+
+    .ai-message.user .ai-message-content {
+      background: var(--primary-color);
+      color: white;
+      border-radius: 12px;
+      border-top-right-radius: 0;
+    }
+
+    .ai-message.user {
+      flex-direction: row-reverse;
+    }
+
+    .ai-message.user .ai-message-avatar {
+      background: #e5e7eb;
+      color: var(--text-primary);
+    }
+
+    /* Fix for dark mode AI chat text visibility */
+    [data-theme="dark"] .ai-message-content {
+      background: #374151;
+      color: #f9fafb;
+    }
+
+    [data-theme="dark"] .ai-message.user .ai-message-avatar {
+      background: #4b5563;
+      color: #f9fafb;
+    }
+
+    [data-theme="dark"] .ai-action-btn {
+      background: #1f2937;
+      color: #f9fafb;
+      border-color: var(--primary-color);
+    }
+
+    [data-theme="dark"] .ai-action-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    [data-theme="dark"] .ai-input input {
+      background-color: var(--card-bg);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    .ai-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .ai-action-btn {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ai-action-btn:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .ai-input {
+      padding: 1rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .ai-input input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      outline: none;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+    }
+
+    .ai-input button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* CUSTOM MODAL */
+    .custom-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .custom-modal.active {
+      display: flex;
+    }
+
+    .custom-modal-content {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+    }
+
+    .custom-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .custom-modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .custom-modal-body {
+      margin-bottom: 1.5rem;
+    }
+
+    .custom-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    /* PRIVACY TIP MODAL */
+    .privacy-tip-modal .custom-modal-content {
+      max-width: 900px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .tip-card {
+      background: var(--bg-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .tip-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .tip-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    /* SETTINGS MODAL */
+    .settings-modal .custom-modal-content {
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .settings-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .settings-tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .settings-tab.active {
+      border-bottom-color: var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    .settings-content {
+      display: none;
+    }
+
+    .settings-content.active {
+      display: block;
+    }
+
+    .settings-section {
+      margin-bottom: 2rem;
+    }
+
+    .settings-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+
+    .settings-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--bg-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .settings-option-info h4 {
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .settings-option-info p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* CONTEXT-AWARE PERMISSIONS */
+    .context-aware-section {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+      border: 1px solid var(--primary-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .context-aware-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .context-aware-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+
+    .context-aware-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .context-aware-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .context-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .comparison-column {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .comparison-column.highlight {
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    }
+
+    .comparison-title {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .comparison-steps {
+      list-style-type: none;
+      counter-reset: steps;
+    }
+
+    .comparison-step {
+      position: relative;
+      padding-left: 2.5rem;
+      margin-bottom: 1rem;
+      counter-increment: steps;
+    }
+
+    .comparison-step::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+      background: var(--primary-light);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* PRIVACY EDUCATION TABS */
+    .privacy-education-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .privacy-education-tab {
+      padding: 0.5rem 1rem;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .privacy-education-tab.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .privacy-education-content {
+      display: none;
+    }
+
+    .privacy-education-content.active {
+      display: block;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        padding: 1rem;
+      }
+      
+      .apps-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+      
+      .score-display {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .notification-panel {
+        width: 100%;
+        right: -100%;
+      }
+
+      .ai-chat {
+        width: 300px;
+      }
+
+      .context-comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LOADING STATES */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .spinner {
+      border: 2px solid var(--border-color);
+      border-top: 2px solid var(--primary-color);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* SIMULATION BADGE */
+    .simulation-badge {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 999;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    /* TOAST NOTIFICATIONS */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 300px;
+      max-width: 400px;
+      animation: slide-in 0.3s ease, fade-out 0.3s ease 4.7s;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .toast.success {
+      border-left-color: var(--success-color);
+    }
+
+    .toast.warning {
+      border-left-color: var(--warning-color);
+    }
+
+    .toast.error {
+      border-left-color: var(--danger-color);
+    }
+
+    .toast-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .toast-icon.success {
+      background: var(--success-color);
+    }
+
+    .toast-icon.warning {
+      background: var(--warning-color);
+    }
+
+    .toast-icon.error {
+      background: var(--danger-color);
+    }
+
+    .toast-icon.info {
+      background: var(--primary-color);
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .toast-message {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    @keyframes slide-in {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fade-out {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
-<body>
+<body data-theme="light">
+  <!-- SIMULATION BADGE -->
+  <div class="simulation-badge">
+    <i class="fas fa-flask"></i> Simulation Mode - Academic Project
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div class="toast-container" id="toastContainer"></div>
+
   <!-- HEADER -->
-  <header class="dashboard-header">
-    <div class="logo">
-      <i class="fas fa-shield-alt"></i>
-      <span>PrivacyGuard</span>
-    </div>
-    <div class="header-actions">
-      <button id="btn-notif" class="icon-button"><i class="fas fa-bell"></i></button>
-      <button id="hamburgerToggle" class="icon-button"><i class="fas fa-bars"></i></button>
-      <div id="hamburgerMenu" class="hidden">
-        <ul>
-          <li><a href="#">Help</a></li>
-          <li><a href="#">Settings</a></li>
-          <li><a href="{{ url_for('login_page') }}">Logout</a></li>
-        </ul>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        <span>PrivacyGuard</span>
+      </div>
+      <div class="header-actions">
+        <div class="encryption-status">
+          <i class="fas fa-lock"></i>
+          <span>AES-256 Encrypted</span>
+        </div>
+        <button class="header-btn notification-badge" id="notificationBtn" data-count="3">
+          <i class="fas fa-bell"></i>
+        </button>
+        <button class="header-btn" id="darkModeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="header-btn" id="exportBtn">
+          <i class="fas fa-download"></i>
+          Export
+        </button>
+        <button class="header-btn" id="settingsBtn">
+          <i class="fas fa-cog"></i>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
-  <main class="dashboard-main">
-    <!-- SEARCH -->
-    <div class="search-container">
-      <div class="search-bar">
-        <i class="fas fa-search"></i>
-        <input id="appSearch" type="text" placeholder="Search by app name...">
+  <!-- MAIN CONTAINER -->
+  <div class="main-container">
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <!-- PRIVACY SCORE -->
+      <div class="card privacy-score-card">
+        <div class="score-display">
+          <div class="score-circle">
+            <span id="privacyScore">78</span>
+          </div>
+          <div class="score-info">
+            <h3>Privacy Protection Score</h3>
+            <div class="score-status" id="scoreStatus">Good Protection</div>
+            <p>Based on your app permissions and usage patterns</p>
+          </div>
+        </div>
+        <div class="score-progress">
+          <div class="score-progress-fill" id="scoreProgress" style="width: 78%"></div>
+        </div>
+      </div>
+
+      <!-- STATS OVERVIEW -->
+      <div class="stats-grid">
+        <div class="stat-card" id="totalAppsCard">
+          <div class="stat-value" id="totalApps">6</div>
+          <div class="stat-label">Monitored Apps</div>
+        </div>
+        <div class="stat-card" id="activePermissionsCard">
+          <div class="stat-value" id="activePermissions">12</div>
+          <div class="stat-label">Active Permissions</div>
+        </div>
+        <div class="stat-card" id="riskAlertsCard">
+          <div class="stat-value" id="riskAlerts">3</div>
+          <div class="stat-label">Risk Alerts</div>
+        </div>
+        <div class="stat-card" id="dataPointsCard">
+          <div class="stat-value" id="dataPoints">0</div>
+          <div class="stat-label">Data Points</div>
+        </div>
+      </div>
+
+      <!-- APPS SECTION -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-mobile-alt"></i>
+            Default Mobile Apps
+          </h2>
+          <button class="btn btn-primary" onclick="simulateActivity()">
+            <i class="fas fa-play"></i>
+            Simulate Activity
+          </button>
+        </div>
+        <div class="apps-grid" id="appsGrid">
+          <!-- Apps will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- PRIVACY ANALYTICS -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <i class="fas fa-chart-line"></i>
+            Privacy Analytics
+          </h2>
+        </div>
+        <div class="chart-container">
+          <canvas id="privacyChart"></canvas>
+        </div>
       </div>
     </div>
 
-    <!-- WELCOME -->
-    <section class="welcome-section">
-      <h1>Welcome back <span id="username">User</span></h1>
-      <p class="subtitle">Here's your privacy summary</p>
-    </section>
-
-    <!-- APPS GRID -->
-    <section class="apps-section">
-      <h2>All apps</h2>
-      <div id="appGrid" class="app-grid">
-        <!-- First row: always visible -->
-        <div class="app-card" data-name="Phone">
-          <div class="app-icon"><i class="fas fa-phone"></i></div><p>Phone</p>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <!-- RECENT ACTIVITY -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-clock"></i>
+            Recent Activity
+          </h3>
         </div>
-        <div class="app-card" data-name="Messages">
-          <div class="app-icon"><i class="fas fa-comment-alt"></i></div><p>Messages</p>
-        </div>
-        <div class="app-card" data-name="Camera">
-          <div class="app-icon"><i class="fas fa-camera"></i></div><p>Camera</p>
-        </div>
-        <!-- Second row: hidden by default -->
-        <div class="app-card extra" data-name="Contacts">
-          <div class="app-icon"><i class="fas fa-address-book"></i></div><p>Contacts</p>
-        </div>
-        <div class="app-card extra" data-name="Browser">
-          <div class="app-icon"><i class="fas fa-globe"></i></div><p>Browser</p>
-        </div>
-        <div class="app-card extra" data-name="Photos">
-          <div class="app-icon"><i class="fas fa-image"></i></div><p>Photos</p>
-        </div>
-      </div>
-      <button id="toggleMore" class="btn-toggle">Show more</button>
-    </section>
-
-    <!-- SUGGESTIONS -->
-    <section class="suggestions-section">
-      <div class="section-header">
-        <div class="section-icon"><i class="fas fa-lightbulb"></i></div><h2>Suggestions</h2>
-      </div>
-      <div class="suggestion-cards">
-        <div class="suggestion-card">
-          <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
-          <div class="suggestion-actions">
-            <button class="btn-small">Review</button>
-            <button class="btn-small btn-outline">Dismiss</button>
-            <button class="btn-small btn-outline">Snooze</button>
-          </div>
-        </div>
-        <div class="suggestion-card">
-          <p>You haven't checked your app permissions in more than a week. Let us help you stay on top.</p>
-          <div class="suggestion-actions">
-            <button class="btn-small">Review</button>
-            <button class="btn-small btn-outline">Dismiss</button>
-            <button class="btn-small btn-outline">Snooze</button>
-          </div>
-        </div>
-        <div class="suggestion-card">
-          <p>Safari has location access, but hasn't been used in 30 days. Would you like to review this permission?</p>
-          <div class="suggestion-actions">
-            <button class="btn-small">Review</button>
-            <button class="btn-small btn-outline">Dismiss</button>
-            <button class="btn-small btn-outline">Snooze</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- GRAPH -->
-    <section class="graph-section">
-      <div class="section-header"><h2>Bar graph</h2></div>
-      <div class="chart-container"><canvas id="privacyChart"></canvas></div>
-    </section>
-
-    <!-- APP DETAIL PANEL -->
-    <div id="appDetail" class="app-detail-panel">
-      <div class="detail-header">
-        <button id="closeDetail" class="close-detail">&times;</button>
-        <div class="app-meta">
-          <div class="app-detail-icon"><i class="fas fa-phone"></i></div>
-          <div>
-            <h2 id="detailName">App Name</h2>
-            <span class="badge" id="detailRisk">Medium</span>
-            <div class="last-used">Last used: <span id="detailLastUsed">—</span></div>
+        <div id="activityTimeline">
+          <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+            <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+            <p>No activity recorded yet</p>
           </div>
         </div>
       </div>
-      <div class="detail-body">
-        <!-- Permissions -->
-        <section class="detail-section">
-          <h3>Permissions</h3>
-          <ul id="permList" class="perm-list"></ul>
-        </section>
-        <!-- Usage History -->
-        <section class="detail-section">
-          <h3>Usage History</h3>
-          <canvas id="historyChart"></canvas>
-        </section>
-        <!-- Real-Time Monitoring -->
-        <section class="detail-section">
-          <h3>Real-Time Monitoring</h3>
-          <label class="switch">
-            <input id="liveAlertsToggle" type="checkbox"><span class="slider round"></span>
-          </label>
-          <span>Live Alerts</span>
-          <button id="nudgeBtn" class="btn-small">Nudge me in 7 days</button>
-        </section>
-        <!-- Data Flow -->
-        <section class="detail-section">
-          <h3>Data Flow</h3>
-          <p id="dataFlow">This app sends data to 3 external domains and pings your location every 30 min.</p>
-        </section>
-      </div>
-      <div class="detail-footer">
-        <button id="revokeAll" class="btn-small btn-outline">Revoke All</button>
-        <button id="grantAll" class="btn-small">Grant All</button>
-      </div>
-    </div>
 
-  </main>
+      <!-- QUICK ACTIONS -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-bolt"></i>
+            Quick Actions
+          </h3>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <button class="btn btn-primary" onclick="reviewPermissions()">
+            <i class="fas fa-shield-alt"></i>
+            Review All Permissions
+          </button>
+          <button class="btn btn-secondary" onclick="enablePrivacyMode()">
+            <i class="fas fa-user-secret"></i>
+            Enable Privacy Mode
+          </button>
+          <button class="btn btn-secondary" onclick="generateReport()">
+            <i class="fas fa-file-alt"></i>
+            Generate Report
+          </button>
+        </div>
+      </div>
 
-  <!-- FOOTER -->
-  <footer class="dashboard-footer">
-    <div class="footer-section">
-      <h3>PrivacyGuard</h3>
-      <p>Air-Force Institute of Technology, Kaduna</p>
-      <p>NAF Base, Nigeria</p>
-    </div>
-    <div class="footer-section">
-      <h3>Company</h3>
-      <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Product</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Jobs</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h3>Get Help</h3>
-      <ul>
-        <li><a href="#">Privacy policies</a></li>
-        <li><a href="#">Product support</a></li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <h3>Newsletter</h3>
-      <div class="newsletter-form">
-        <input type="email" placeholder="Enter your email address">
-        <button class="btn-small">Subscribe</button>
-      </div>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
+      <!-- PRIVACY TIPS -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-lightbulb"></i>
+            Privacy Tip
+          </h3>
+        </div>
+        <div id="privacyTipContent">
+          <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5;">
+            <strong>Did you know?</strong> Location permissions can reveal your daily routines. 
+            Consider disabling location access for apps that don't need it for core functionality.
+          </p>
+          <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="showPrivacyTips()">
+            Learn More
+          </button>
+        </div>
       </div>
     </div>
-  </footer>
-  <div class="copyright">
-    <p>© 2023 Privacy Pro. All rights reserved.</p>
   </div>
 
-  <!-- ALERTS SIDEBAR -->
-  <div id="alerts-wrapper" class="hidden">
-    <div class="alerts">
-      <button id="btn-close-alerts" class="close-alerts" aria-label="Close Alerts">✕</button>
-      <h2>Alert</h2>
-      <div class="alert-item" data-id="101">
-        <strong>Messages</strong>
-        <p>This app is currently accessing your microphone. Do you wish to revoke its current permission status?</p>
-        <div class="alert-actions">
-          <button class="btn-small btn-yes" data-response="yes">Yes</button>
-          <button class="btn-small btn-no" data-response="no">No</button>
-          <a href="/detail/101" class="btn-small">Read more →</a>
+  <!-- APP DETAIL MODAL -->
+  <div class="modal" id="appModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="app-icon" style="width: 50px; height: 50px; margin: 0;">
+            <i class="fas fa-phone" id="modalAppIcon"></i>
+          </div>
+          <div>
+            <h2 id="modalAppName">Phone</h2>
+            <p style="color: var(--text-secondary); margin: 0;">Default System App</p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Privacy Score: <span id="modalAppScore">85%</span></h3>
+        <div class="score-progress">
+          <div class="score-progress-fill" id="modalScoreProgress" style="width: 85%"></div>
         </div>
       </div>
-      <div class="alert-item" data-id="102">
-        <strong>Messages</strong>
-        <p>Safari has location access, but hasn’t been used in 30 days. Would you like to review this permission?</p>
-        <div class="alert-actions">
-          <button class="btn-small btn-yes" data-response="yes">Yes</button>
-          <button class="btn-small btn-no" data-response="no">No</button>
-          <a href="/detail/102" class="btn-small">Read more →</a>
+
+      <h3 style="margin-bottom: 1rem;">Permissions</h3>
+      <div id="modalPermissions">
+        <!-- Permissions will be populated by JavaScript -->
+      </div>
+
+      <div class="context-aware-section">
+        <div class="context-aware-header">
+          <div class="context-aware-icon">
+            <i class="fas fa-magic"></i>
+          </div>
+          <div>
+            <div class="context-aware-title">Context-Aware Permissions</div>
+            <div class="context-aware-subtitle">PrivacyGuard's Exclusive Feature</div>
+          </div>
         </div>
+        <p style="margin-bottom: 1rem;">Unlike standard permission models, PrivacyGuard offers context-aware permissions that automatically disable when not needed for the specific task.</p>
+        <div id="contextAwareOptions">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+        <button class="btn btn-primary" id="savePermissionsBtn">
+          <i class="fas fa-save"></i>
+          Save Changes
+        </button>
+        <button class="btn btn-secondary" onclick="closeModal()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION PANEL -->
+  <div class="notification-panel" id="notificationPanel">
+    <div class="notification-header">
+      <h3>Privacy Notifications</h3>
+      <button class="modal-close" onclick="closeNotifications()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="notification-item unread">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+        <strong>High Risk Permission Detected</strong>
+        <small style="color: var(--text-secondary);">2m ago</small>
+      </div>
+      <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary);">
+        Browser app is accessing your location frequently. Consider reviewing this permission.
+      </p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="openAppModal('Browser')">Review</button>
+        <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="dismissNotification(this)">Dismiss</button>
+      </div>
+    </div>
+    <div class="notification-item unread">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+        <strong>Privacy Score Improved</strong>
+        <small style="color: var(--text-secondary);">1h ago</small>
+      </div>
+      <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary);">
+        Your privacy score increased to 78% after disabling unused permissions.
+      </p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="dismissNotification(this)">Dismiss</button>
+      </div>
+    </div>
+    <div class="notification-item">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+        <strong>Weekly Privacy Report</strong>
+        <small style="color: var(--text-secondary);">1d ago</small>
+      </div>
+      <p style="margin: 0; font-size: 0.875rem; color: var(--text-secondary);">
+        Your weekly privacy report is ready. View insights about your app usage patterns.
+      </p>
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+        <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="generateReport()">View Report</button>
+        <button class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;" onclick="dismissNotification(this)">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI ASSISTANT -->
+  <div class="ai-assistant">
+    <button class="ai-toggle" id="aiToggle">
+      <i class="fas fa-robot"></i>
+    </button>
+    <div class="ai-chat" id="aiChat">
+      <div class="ai-header">
+        <div class="ai-title">
+          <i class="fas fa-robot"></i>
+          <span>Privacy AI Assistant</span>
+        </div>
+        <button class="ai-close" id="aiClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="ai-messages" id="aiMessages">
+        <div class="ai-message">
+          <div class="ai-message-avatar">
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="ai-message-content">
+            <p>Hi there! 👋 I'm your Privacy AI Assistant. I'm here to help you understand and protect your digital privacy. Feel free to chat with me naturally - I can answer questions like "How are you?" or help with privacy topics!</p>
+            <div class="ai-actions">
+              <button class="ai-action-btn" onclick="aiNewUserGuide()">I'm new here</button>
+              <button class="ai-action-btn" onclick="aiExplainScore()">Check my privacy</button>
+              <button class="ai-action-btn" onclick="aiShowCapabilities()">What can you do?</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ai-input">
+        <input type="text" placeholder="Ask me about privacy..." id="aiInput">
+        <button id="aiSend">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM MODALS -->
+  <!-- Privacy Mode Modal -->
+  <div class="custom-modal" id="privacyModeModal">
+    <div class="custom-modal-content">
+      <div class="custom-modal-header">
+        <h3 class="custom-modal-title">
+          <i class="fas fa-user-secret"></i>
+          Enable Privacy Mode
+        </h3>
+        <button class="modal-close" onclick="closeCustomModal('privacyModeModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="custom-modal-body">
+        <p>Privacy Mode will enhance your device's security by:</p>
+        <ul style="margin: 1rem 0 1rem 1.5rem;">
+          <li>Disabling high-risk permissions</li>
+          <li>Enabling encryption for all data</li>
+          <li>Activating enhanced monitoring</li>
+          <li>Blocking unnecessary tracking</li>
+        </ul>
+        <p>This may affect some app functionality. Do you want to proceed?</p>
+      </div>
+      <div class="custom-modal-footer">
+        <button class="btn btn-secondary" onclick="closeCustomModal('privacyModeModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="activatePrivacyMode()">Enable Privacy Mode</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Generation Modal -->
+  <div class="custom-modal" id="reportModal">
+    <div class="custom-modal-content">
+      <div class="custom-modal-header">
+        <h3 class="custom-modal-title">
+          <i class="fas fa-file-alt"></i>
+          Generate Privacy Report
+        </h3>
+        <button class="modal-close" onclick="closeCustomModal('reportModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="custom-modal-body">
+        <p>Your privacy report will include:</p>
+        <ul style="margin: 1rem 0 1rem 1.5rem;">
+          <li>Privacy score analysis</li>
+          <li>Permission usage patterns</li>
+          <li>Security recommendations</li>
+          <li>Compliance status</li>
+          <li>Risk assessment</li>
+        </ul>
+        <p>Choose your preferred format:</p>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="radio" name="reportFormat" value="pdf" checked>
+            PDF Document
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="radio" name="reportFormat" value="csv">
+            CSV Data
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="radio" name="reportFormat" value="json">
+            JSON Format
+          </label>
+        </div>
+      </div>
+      <div class="custom-modal-footer">
+        <button class="btn btn-secondary" onclick="closeCustomModal('reportModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="downloadReport()">Generate Report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review All Permissions Modal -->
+  <div class="custom-modal" id="reviewPermissionsModal">
+    <div class="custom-modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+      <div class="custom-modal-header">
+        <h3 class="custom-modal-title">
+          <i class="fas fa-shield-alt"></i>
+          Review All Permissions
+        </h3>
+        <button class="modal-close" onclick="closeCustomModal('reviewPermissionsModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="custom-modal-body">
+        <p>Review and manage all app permissions in one place:</p>
+        <div id="allPermissionsList" style="margin-top: 1.5rem;">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+      <div class="custom-modal-footer">
+        <button class="btn btn-secondary" onclick="closeCustomModal('reviewPermissionsModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveAllPermissions()">Save All Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Tips Modal -->
+  <div class="custom-modal privacy-tip-modal" id="privacyTipsModal">
+    <div class="custom-modal-content">
+      <div class="custom-modal-header">
+        <h3 class="custom-modal-title">
+          <i class="fas fa-lightbulb"></i>
+          Privacy Education Center
+        </h3>
+        <button class="modal-close" onclick="closeCustomModal('privacyTipsModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="custom-modal-body">
+        <p>Learn how to protect your privacy with these expert tips:</p>
+        
+        <div class="privacy-education-tabs">
+          <button class="privacy-education-tab active" onclick="switchPrivacyTab('location')">Location</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('camera')">Camera</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('microphone')">Microphone</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('contacts')">Contacts</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('storage')">Storage</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('calendar')">Calendar</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('phone')">Phone/SMS</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('sensors')">Sensors</button>
+          <button class="privacy-education-tab" onclick="switchPrivacyTab('context')">Context-Aware</button>
+        </div>
+        
+        <div class="privacy-education-content active" id="location-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <h4>Location Privacy</h4>
+            </div>
+            <p>Location data can reveal your home, work, and daily routines. Only grant location access to apps that truly need it for their core functionality.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Location</h4>
+              <p>Traditional "Only while using" permissions still allow apps to access your location for ANY reason while the app is open. Our context-aware approach only enables location when you're actively using location-related features.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> When using a browser, location is only enabled when searching for nearby places or checking maps, not when reading news or shopping online.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="camera-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-camera"></i>
+              </div>
+              <h4>Camera Permissions</h4>
+            </div>
+            <p>Camera access should only be granted to apps you trust completely. Be especially cautious with apps that request both camera and storage permissions, as they can potentially save images without your knowledge.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Camera</h4>
+              <p>Traditional permissions allow camera access anytime the app is open. Our context-aware approach only enables the camera when you're actively using camera-related features.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> In a messaging app, camera is only enabled when you tap "Take Photo" or "Record Video," not when you're just reading messages.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="microphone-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-microphone"></i>
+              </div>
+              <h4>Microphone Access</h4>
+            </div>
+            <p>Apps with microphone access can potentially record conversations. Review which apps have this permission and disable it for apps that don't clearly need it for their primary function.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Microphone</h4>
+              <p>Traditional permissions allow microphone access anytime the app is open. Our context-aware approach only enables the microphone when you're actively using audio-related features.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> In a video calling app, microphone is only enabled when you're in an active call or recording a voice message, not when browsing contacts.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="contacts-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-address-book"></i>
+              </div>
+              <h4>Contact Access</h4>
+            </div>
+            <p>When apps access your contacts, they may upload this data to their servers. Only grant contacts permission to messaging and communication apps that genuinely need it to function properly.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Contacts</h4>
+              <p>Traditional permissions give apps access to your entire contact list. Our context-aware approach only provides contact information when you're actively selecting contacts to communicate with.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> In a messaging app, contacts are only accessible when you're composing a new message or adding participants to a group chat.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="storage-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-hdd"></i>
+              </div>
+              <h4>Storage Permissions</h4>
+            </div>
+            <p>Storage permissions allow apps to read and write files on your device. This could include personal photos, documents, and other sensitive files. Be selective about which apps get this access.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Storage</h4>
+              <p>Traditional permissions give apps broad access to your files. Our context-aware approach only allows file access when you're actively selecting files to share or save.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> In a photo editing app, storage is only accessible when you're importing photos to edit or saving edited photos.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="calendar-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-calendar"></i>
+              </div>
+              <h4>Calendar Permissions</h4>
+            </div>
+            <p>Calendar access reveals your schedule, appointments, and personal routines. Only grant this permission to apps that need to create or manage calendar events as their primary function.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Calendar</h4>
+              <p>Traditional permissions give apps access to your entire calendar. Our context-aware approach only allows calendar access when you're actively scheduling or managing events.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> In a meeting app, calendar is only accessible when you're scheduling a new meeting or checking availability.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="phone-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <h4>Phone & SMS Permissions</h4>
+            </div>
+            <p>Phone permissions allow apps to make calls, read call logs, and access SMS messages. This is highly sensitive data that should only be granted to communication apps you trust completely.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Phone</h4>
+              <p>Traditional permissions give apps broad phone access. Our context-aware approach only enables phone features when you're actively making calls or sending messages.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> In a business app, phone access is only enabled when you tap a phone number to call, not when browsing the app normally.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="sensors-content">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <i class="fas fa-mobile-alt"></i>
+              </div>
+              <h4>Sensor Permissions</h4>
+            </div>
+            <p>Sensor permissions include accelerometer, gyroscope, and other motion sensors. While seemingly harmless, these can be used to infer activities, typing patterns, and even location through movement analysis.</p>
+            <div class="context-aware-section" style="margin-top: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">PrivacyGuard Innovation: Context-Aware Sensors</h4>
+              <p>Traditional permissions give apps constant sensor access. Our context-aware approach only enables sensors when you're actively using features that require motion detection.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-color); border-radius: 8px;">
+                <strong>Example:</strong> In a fitness app, motion sensors are only active when you start a workout, not when browsing exercise guides.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="privacy-education-content" id="context-content">
+          <div class="context-aware-section">
+            <div class="context-aware-header">
+              <div class="context-aware-icon">
+                <i class="fas fa-magic"></i>
+              </div>
+              <div>
+                <div class="context-aware-title">Context-Aware Permissions</div>
+                <div class="context-aware-subtitle">The Future of Privacy Protection</div>
+              </div>
+            </div>
+            <p>PrivacyGuard introduces a revolutionary approach to app permissions that goes beyond the traditional "Allow" or "Deny" model.</p>
+            
+            <div class="context-comparison">
+              <div class="comparison-column">
+                <div class="comparison-title">
+                  <i class="fas fa-times-circle" style="color: var(--danger-color);"></i>
+                  Traditional Permissions
+                </div>
+                <ol class="comparison-steps">
+                  <li>User grants permission once</li>
+                  <li>App has access anytime it's open</li>
+                  <li>No context awareness</li>
+                  <li>User must manually revoke</li>
+                  <li>All-or-nothing approach</li>
+                </ol>
+              </div>
+              
+              <div class="comparison-column highlight">
+                <div class="comparison-title">
+                  <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                  Context-Aware Permissions
+                </div>
+                <ol class="comparison-steps">
+                  <li>User grants permission for specific use cases</li>
+                  <li>App only has access during relevant tasks</li>
+                  <li>Automatic context detection</li>
+                  <li>Auto-revokes when task is complete</li>
+                  <li>Granular, intelligent control</li>
+                </ol>
+              </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-color); border-radius: 12px;">
+              <h4 style="margin-bottom: 1rem; color: var(--primary-color);">Real-World Example: Photo Sharing</h4>
+              <p><strong>Traditional:</strong> You grant a social media app camera permission. Now it can access your camera anytime the app is open, even when you're just scrolling through your feed.</p>
+              <p style="margin-top: 0.5rem;"><strong>Context-Aware:</strong> You grant camera permission specifically for "posting photos." The app can only access your camera when you tap "Create Post" → "Add Photo." Once you finish posting or cancel, camera access is automatically revoked.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="custom-modal-footer">
+        <button class="btn btn-primary" onclick="closeCustomModal('privacyTipsModal')">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="custom-modal settings-modal" id="settingsModal">
+    <div class="custom-modal-content">
+      <div class="custom-modal-header">
+        <h3 class="custom-modal-title">
+          <i class="fas fa-cog"></i>
+          Settings
+        </h3>
+        <button class="modal-close" onclick="closeCustomModal('settingsModal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="custom-modal-body">
+        <div class="settings-tabs">
+          <div class="settings-tab active" onclick="switchSettingsTab('general')">General</div>
+          <div class="settings-tab" onclick="switchSettingsTab('privacy')">Privacy</div>
+          <div class="settings-tab" onclick="switchSettingsTab('notifications')">Notifications</div>
+          <div class="settings-tab" onclick="switchSettingsTab('advanced')">Advanced</div>
+        </div>
+        
+        <div class="settings-content active" id="general-settings">
+          <div class="settings-section">
+            <div class="settings-section-title">Appearance</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Dark Mode</h4>
+                <p>Switch between light and dark themes</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="darkModeSettingToggle" onchange="toggleDarkModeFromSettings()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Compact View</h4>
+                <p>Show more information in less space</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" onchange="toggleCompactView()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <div class="settings-section-title">Data & Storage</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Auto-Export Reports</h4>
+                <p>Automatically generate weekly privacy reports</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleAutoExport()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Data Retention</h4>
+                <p>How long to keep activity logs</p>
+              </div>
+              <select style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
+                <option value="7">7 days</option>
+                <option value="30" selected>30 days</option>
+                <option value="90">90 days</option>
+                <option value="365">1 year</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-content" id="privacy-settings">
+          <div class="settings-section">
+            <div class="settings-section-title">Privacy Protection</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Enhanced Monitoring</h4>
+                <p>Monitor app behavior more frequently</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleEnhancedMonitoring()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Context-Aware Permissions</h4>
+                <p>Enable intelligent permission management</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleContextAware()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Automatic Privacy Mode</h4>
+                <p>Automatically enable privacy mode for new apps</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" onchange="toggleAutoPrivacyMode()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <div class="settings-section-title">Risk Thresholds</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>High Risk Alert Threshold</h4>
+                <p>Privacy score level that triggers high risk alerts</p>
+              </div>
+              <input type="range" min="0" max="100" value="60" style="width: 100px;" onchange="updateRiskThreshold('high', this.value)">
+              <span id="highRiskValue">60%</span>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Medium Risk Alert Threshold</h4>
+                <p>Privacy score level that triggers medium risk alerts</p>
+              </div>
+              <input type="range" min="0" max="100" value="40" style="width: 100px;" onchange="updateRiskThreshold('medium', this.value)">
+              <span id="mediumRiskValue">40%</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-content" id="notifications-settings">
+          <div class="settings-section">
+            <div class="settings-section-title">Alert Preferences</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Real-time Alerts</h4>
+                <p>Show notifications when apps access sensitive data</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleRealTimeAlerts()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Weekly Summary</h4>
+                <p>Receive weekly privacy summary notifications</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleWeeklySummary()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>AI Assistant Suggestions</h4>
+                <p>Allow AI to proactively suggest privacy improvements</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleAISuggestions()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <div class="settings-section-title">Notification Types</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>High Risk Permission Access</h4>
+                <p>Alert when apps access camera, microphone, or location</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleHighRiskNotifications()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Background Activity</h4>
+                <p>Alert when apps access data in the background</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleBackgroundNotifications()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Privacy Score Changes</h4>
+                <p>Notify when your privacy score changes significantly</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" onchange="toggleScoreNotifications()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-content" id="advanced-settings">
+          <div class="settings-section">
+            <div class="settings-section-title">Security</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Encryption Level</h4>
+                <p>Data encryption strength</p>
+              </div>
+              <select style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
+                <option value="aes128">AES-128</option>
+                <option value="aes256" selected>AES-256</option>
+                <option value="aes512">AES-512</option>
+              </select>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Secure Boot Verification</h4>
+                <p>Verify system integrity on startup</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked onchange="toggleSecureBoot()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <div class="settings-section-title">Developer Options</div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>Debug Mode</h4>
+                <p>Enable detailed logging for troubleshooting</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" onchange="toggleDebugMode()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="settings-option">
+              <div class="settings-option-info">
+                <h4>API Access</h4>
+                <p>Allow third-party privacy tools to access data</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" onchange="toggleAPIAccess()">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="settings-section">
+            <div class="settings-section-title">Reset Options</div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <button class="btn btn-secondary" onclick="resetSettings()">
+                <i class="fas fa-undo"></i>
+                Reset Settings to Default
+              </button>
+              <button class="btn btn-secondary" onclick="clearActivityLog()">
+                <i class="fas fa-trash"></i>
+                Clear Activity Log
+              </button>
+              <button class="btn btn-danger" onclick="factoryReset()">
+                <i class="fas fa-exclamation-triangle"></i>
+                Factory Reset (All Data)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="custom-modal-footer">
+        <button class="btn btn-secondary" onclick="closeCustomModal('settingsModal')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
       </div>
     </div>
   </div>
 
   <!-- SCRIPTS -->
   <script>
-    // Toggle alerts sidebar
-    const btnNotif       = document.getElementById('btn-notif');
-    const alertsWrapper  = document.getElementById('alerts-wrapper');
-    const btnCloseAlerts = document.getElementById('btn-close-alerts');
+    console.log('PrivacyGuard Framework Loading...');
 
-    btnNotif.addEventListener('click', () => {
-      alertsWrapper.classList.add('open'); alertsWrapper.classList.remove('hidden');
-    });
-    btnCloseAlerts.addEventListener('click', () => {
-      alertsWrapper.classList.remove('open'); setTimeout(() => alertsWrapper.classList.add('hidden'), 300);
-    });
+    // Global state management
+    const privacyState = {
+      currentScore: 78,
+      apps: {
+        Phone: { 
+          score: 85, 
+          risk: 'low', 
+          permissions: [
+            { name: 'Microphone', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: false },
+            { name: 'Contacts', enabled: true, risk: 'low', lastUsed: 'Never', contextAware: true },
+            { name: 'Phone', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: false }
+          ], 
+          active: false,
+          icon: 'fa-phone'
+        },
+        Messages: { 
+          score: 75, 
+          risk: 'medium', 
+          permissions: [
+            { name: 'Microphone', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: true },
+            { name: 'Contacts', enabled: true, risk: 'low', lastUsed: 'Never', contextAware: true },
+            { name: 'Camera', enabled: false, risk: 'high', lastUsed: 'Never', contextAware: true }
+          ], 
+          active: false,
+          icon: 'fa-comment-alt'
+        },
+        Camera: { 
+          score: 60, 
+          risk: 'high', 
+          permissions: [
+            { name: 'Camera', enabled: true, risk: 'high', lastUsed: 'Never', contextAware: false },
+            { name: 'Microphone', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: true },
+            { name: 'Location', enabled: true, risk: 'high', lastUsed: 'Never', contextAware: true },
+            { name: 'Storage', enabled: true, risk: 'low', lastUsed: 'Never', contextAware: false }
+          ], 
+          active: true,
+          icon: 'fa-camera'
+        },
+        Browser: { 
+          score: 45, 
+          risk: 'high', 
+          permissions: [
+            { name: 'Location', enabled: true, risk: 'high', lastUsed: 'Never', contextAware: false },
+            { name: 'Camera', enabled: true, risk: 'high', lastUsed: 'Never', contextAware: false },
+            { name: 'Microphone', enabled: true, risk: 'high', lastUsed: 'Never', contextAware: false },
+            { name: 'Storage', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: false }
+          ], 
+          active: true,
+          icon: 'fa-globe'
+        },
+        Contacts: { 
+          score: 80, 
+          risk: 'medium', 
+          permissions: [
+            { name: 'Contacts', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: false },
+            { name: 'Storage', enabled: true, risk: 'low', lastUsed: 'Never', contextAware: true },
+            { name: 'Phone', enabled: false, risk: 'medium', lastUsed: 'Never', contextAware: true }
+          ], 
+          active: false,
+          icon: 'fa-address-book'
+        },
+        Photos: { 
+          score: 70, 
+          risk: 'medium', 
+          permissions: [
+            { name: 'Storage', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: false },
+            { name: 'Camera', enabled: true, risk: 'medium', lastUsed: 'Never', contextAware: true },
+            { name: 'Location', enabled: false, risk: 'high', lastUsed: 'Never', contextAware: true }
+          ], 
+          active: false,
+          icon: 'fa-image'
+        }
+      },
+      activityLog: [],
+      notifications: 3,
+      darkMode: false,
+      encryptionEnabled: true,
+      dataPoints: 0,
+      currentAppModal: null,
+      pendingPermissionChanges: {},
+      settings: {
+        enhancedMonitoring: true,
+        contextAwarePermissions: true,
+        autoPrivacyMode: false,
+        realTimeAlerts: true,
+        weeklySummary: true,
+        aiSuggestions: true,
+        highRiskNotifications: true,
+        backgroundNotifications: true,
+        scoreNotifications: false,
+        compactView: false,
+        autoExport: true,
+        debugMode: false,
+        apiAccess: false,
+        secureBoot: true,
+        encryptionLevel: 'aes256',
+        dataRetention: 30,
+        highRiskThreshold: 60,
+        mediumRiskThreshold: 40
+      }
+    };
 
-    // Alerts yes/no
-    document.querySelectorAll('.alert-actions .btn-yes, .alert-actions .btn-no')
-      .forEach(btn => btn.addEventListener('click', e => {
-        const id = e.target.closest('.alert-item').dataset.id;
-        fetch('/api/respond', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({msg_id:id, response: e.target.dataset.response})})
-          .then(r=>r.json()).then(()=>{
-            e.target.parentElement.querySelectorAll('button').forEach(b=>b.disabled=true);
+    // Permission configurations
+    const permissionConfig = {
+      Microphone: { icon: 'fa-microphone', risk: 'medium', description: 'Record audio and voice' },
+      Camera: { icon: 'fa-camera', risk: 'high', description: 'Take photos and videos' },
+      Location: { icon: 'fa-map-marker-alt', risk: 'high', description: 'Access your location' },
+      Storage: { icon: 'fa-hdd', risk: 'low', description: 'Read and write files' },
+      Contacts: { icon: 'fa-address-book', risk: 'medium', description: 'Access your contacts' },
+      Phone: { icon: 'fa-phone', risk: 'medium', description: 'Make and manage calls' }
+    };
+
+    // Context-aware permission descriptions
+    const contextAwareDescriptions = {
+      Microphone: {
+        traditional: "App can access microphone anytime it's open",
+        contextAware: "Microphone only accessible when recording voice messages or making calls"
+      },
+      Camera: {
+        traditional: "App can access camera anytime it's open",
+        contextAware: "Camera only accessible when taking photos or recording videos"
+      },
+      Location: {
+        traditional: "App can access location anytime it's open",
+        contextAware: "Location only accessible when using navigation or location-based features"
+      },
+      Storage: {
+        traditional: "App can access all files anytime it's open",
+        contextAware: "Storage only accessible when importing/exporting specific files"
+      },
+      Contacts: {
+        traditional: "App can access all contacts anytime it's open",
+        contextAware: "Contacts only accessible when composing messages or making calls"
+      },
+      Phone: {
+        traditional: "App can make calls and access call logs anytime it's open",
+        contextAware: "Phone only accessible when actively making calls or managing call history"
+      }
+    };
+
+    // Enhanced AI knowledge base for intelligent responses
+    const aiKnowledgeBase = {
+      greetings: [
+        "Hello! I'm your AI assistant. How can I help you today?",
+        "Hi there! I'm ready to assist you with anything you need.",
+        "Greetings! I'm here to help. What would you like to talk about?",
+        "Hey! I'm your AI assistant. What can I do for you today?"
+      ],
+      farewells: [
+        "Goodbye! Feel free to chat anytime you need assistance.",
+        "See you later! I'll be here when you need me.",
+        "Take care! Come back anytime you have questions.",
+        "Bye for now! Looking forward to our next conversation."
+      ],
+      smallTalk: {
+        "how are you": [
+          "I'm doing great, thanks for asking! How about you?",
+          "I'm functioning perfectly! How can I assist you today?",
+          "All systems operational and ready to help! How are you doing?"
+        ],
+        "who are you": [
+          "I'm an AI assistant designed to help with various topics and questions. Think of me as your digital companion!",
+          "I'm your AI assistant, created to provide information and assistance on a wide range of topics.",
+          "I'm an artificial intelligence designed to be helpful, informative, and engaging in conversation."
+        ],
+        "what can you do": [
+          "I can answer questions, provide information on various topics, help with tasks, engage in conversation, and much more!",
+          "I'm designed to assist with information, answer questions, have conversations, and help with many different tasks.",
+          "I can discuss almost any topic, answer questions, provide explanations, and engage in meaningful conversation."
+        ],
+        "tell me a joke": [
+          "Why don't scientists trust atoms? Because they make up everything!",
+          "What did the ocean say to the beach? Nothing, it just waved!",
+          "Why did the scarecrow win an award? Because he was outstanding in his field!",
+          "What do you call a fake noodle? An impasta!",
+          "Why don't eggs tell jokes? They'd crack each other up!",
+          "What's the best thing about Switzerland? I don't know, but the flag is a big plus!"
+        ],
+        "thank you": [
+          "You're welcome! I'm happy I could help.",
+          "Anytime! Don't hesitate to ask if you need anything else.",
+          "My pleasure! I'm here whenever you need assistance."
+        ]
+      },
+      topics: {
+        weather: [
+          "I don't have real-time weather data, but I'd be happy to discuss weather patterns or climate topics in general.",
+          "While I can't check the current weather, I can discuss meteorology and climate science if you're interested."
+        ],
+        music: [
+          "Music is a universal language! I'd be happy to discuss genres, artists, or the science behind music.",
+          "I love talking about music! Whether it's about genres, history, or theory, I'm here to chat."
+        ],
+        movies: [
+          "Movies are fascinating! I can discuss films, directors, genres, or the filmmaking process.",
+          "I enjoy talking about cinema! From classics to recent releases, I'm happy to discuss films."
+        ],
+        books: [
+          "Books open up worlds of imagination! I'd love to discuss literature, authors, or reading recommendations.",
+          "Reading is wonderful! I'm happy to chat about books, genres, authors, or literary analysis."
+        ],
+        technology: [
+          "Technology is constantly evolving! I'm here to discuss tech trends, gadgets, or digital innovations.",
+          "The tech world is fascinating! I can chat about devices, software, AI, or any tech-related topics."
+        ],
+        health: [
+          "Health is important! While I'm not a medical professional, I can discuss general wellness topics.",
+          "Wellness matters! I can chat about general health topics, though remember I'm not a substitute for professional medical advice."
+        ],
+        food: [
+          "Food brings people together! I'd be happy to discuss cuisines, cooking techniques, or food culture.",
+          "Culinary topics are delicious to discuss! From recipes to food history, I'm here to chat about all things food-related."
+        ],
+        travel: [
+          "Exploring the world is amazing! I'd love to discuss destinations, travel tips, or cultural experiences.",
+          "Travel broadens horizons! I'm happy to chat about destinations, travel planning, or cultural differences."
+        ],
+        science: [
+          "Science helps us understand our world! I can discuss various scientific fields and discoveries.",
+          "The scientific method is fascinating! I'm here to chat about physics, chemistry, biology, or any scientific topic."
+        ],
+        sports: [
+          "Sports bring excitement and competition! I can discuss various sports, teams, or athletic achievements.",
+          "Athletic pursuits are inspiring! Whether it's professional sports or fitness, I'm happy to chat."
+        ]
+      },
+      privacyTopics: {
+        "privacy score": [
+          "Your current privacy score is 78%, which is in the 'Good' range. This score is calculated based on your app permissions, usage patterns, and security settings.",
+          "I can help you understand your privacy score and suggest ways to improve it. Would you like me to analyze your current settings?"
+        ],
+        "permissions": [
+          "App permissions control what data and features apps can access on your device. I can help you review and optimize these settings.",
+          "Managing permissions is crucial for privacy. Would you like me to show you which apps have the most sensitive permissions?"
+        ],
+        "location": [
+          "Location data is one of the most sensitive types of information. It can reveal your home, work, and daily patterns.",
+          "I notice some apps have location access. Would you like me to review which ones really need it?"
+        ],
+        "camera": [
+          "Camera permissions allow apps to take photos and videos. It's important to only grant this to trusted apps.",
+          "Camera access should be limited to apps that genuinely need it for their core functionality."
+        ],
+        "microphone": [
+          "Microphone access can be used to record conversations. Review these permissions carefully.",
+          "Apps with microphone access can potentially listen in. Let me help you audit these permissions."
+        ]
+      }
+    };
+
+    // Enhanced AI response generation
+    function generateAIResponse(userInput) {
+      const input = userInput.toLowerCase().trim();
+      
+      // Check for greetings
+      if (input.match(/^(hi|hello|hey|greetings|good morning|good afternoon|good evening)/)) {
+        return getRandomResponse(aiKnowledgeBase.greetings);
+      }
+      
+      // Check for farewells
+      if (input.match(/(bye|goodbye|see you|farewell|take care|later)/)) {
+        return getRandomResponse(aiKnowledgeBase.farewells);
+      }
+      
+      // Check for small talk
+      for (const [key, responses] of Object.entries(aiKnowledgeBase.smallTalk)) {
+        if (input.includes(key)) {
+          return getRandomResponse(responses);
+        }
+      }
+      
+      // Check for topic-based responses
+      for (const [topic, responses] of Object.entries(aiKnowledgeBase.topics)) {
+        if (input.includes(topic)) {
+          return getRandomResponse(responses);
+        }
+      }
+      
+      // Check for privacy-related topics
+      for (const [topic, responses] of Object.entries(aiKnowledgeBase.privacyTopics)) {
+        if (input.includes(topic)) {
+          return getRandomResponse(responses);
+        }
+      }
+      
+      // Check for specific questions
+      if (input.includes("what") && input.includes("time")) {
+        return "I don't have access to real-time information, but I can help you with many other topics!";
+      }
+      
+      if (input.includes("how old are you")) {
+        return "I'm an AI, so I don't age in the traditional sense! I was created to be helpful and informative.";
+      }
+      
+      if (input.includes("where are you from")) {
+        return "I exist in the digital realm! I was created to assist users like you with various questions and tasks.";
+      }
+      
+      if (input.includes("favorite") && input.includes("color")) {
+        return "I find all colors fascinating! Each has its own wavelength and psychological associations. Do you have a favorite color?";
+      }
+      
+      if (input.includes("meaning of life")) {
+        return "That's one of humanity's biggest questions! Philosophers have debated this for centuries. What gives your life meaning?";
+      }
+      
+      // Default responses for unrecognized input
+      const defaultResponses = [
+        "That's an interesting topic! Could you tell me more about what you'd like to know?",
+        "I'd be happy to help with that! Can you provide a bit more detail about what you're looking for?",
+        "I'm here to assist! Could you elaborate on your question so I can give you the best response?",
+        "That's a great question! I'm ready to help - could you give me a bit more context?",
+        "I'm listening! Feel free to ask me anything or share what's on your mind.",
+        "I'm designed to be helpful with a wide range of topics. What would you like to explore together?"
+      ];
+      
+      return getRandomResponse(defaultResponses);
+    }
+
+    function getRandomResponse(responses) {
+      return responses[Math.floor(Math.random() * responses.length)];
+    }
+
+    // Utility functions
+    function updatePrivacyScore(newScore) {
+      privacyState.currentScore = newScore;
+      document.getElementById('privacyScore').textContent = newScore;
+      document.getElementById('scoreProgress').style.width = newScore + '%';
+      
+      const statusElement = document.getElementById('scoreStatus');
+      if (newScore >= 80) {
+        statusElement.textContent = 'Excellent Protection';
+        statusElement.style.color = '#10b981';
+      } else if (newScore >= 60) {
+        statusElement.textContent = 'Good Protection';
+        statusElement.style.color = '#f59e0b';
+      } else if (newScore >= 40) {
+        statusElement.textContent = 'Fair Protection';
+        statusElement.style.color = '#f97316';
+      } else {
+        statusElement.textContent = 'Poor Protection';
+        statusElement.style.color = '#ef4444';
+      }
+      
+      updateChart();
+    }
+
+    function addActivity(appName, permission, action) {
+      const activity = {
+        timestamp: Date.now(),
+        appName,
+        permission,
+        action,
+        risk: getPermissionRisk(appName, permission)
+      };
+      
+      privacyState.activityLog.unshift(activity);
+      updateActivityTimeline();
+      
+      // Update app status
+      const appCard = document.querySelector(`[data-app="${appName}"]`);
+      if (appCard) {
+        const status = appCard.querySelector('.app-status');
+        status.classList.add('active');
+        setTimeout(() => status.classList.remove('active'), 3000);
+      }
+
+      // Update data points
+      incrementDataPoints();
+    }
+
+    function getPermissionRisk(appName, permissionName) {
+      const app = privacyState.apps[appName];
+      if (!app) return 'low';
+      
+      const permission = app.permissions.find(p => p.name === permissionName);
+      return permission ? permission.risk : 'low';
+    }
+
+    function updateActivityTimeline() {
+      const timeline = document.getElementById('activityTimeline');
+      
+      if (privacyState.activityLog.length === 0) {
+        timeline.innerHTML = `
+          <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+            <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+            <p>No activity recorded yet</p>
+          </div>
+        `;
+        return;
+      }
+
+      timeline.innerHTML = privacyState.activityLog.slice(0, 5).map(activity => {
+        const timeAgo = formatTimeAgo(activity.timestamp);
+        const permission = permissionConfig[activity.permission];
+        
+        return `
+          <div class="activity-item">
+            <div class="activity-time">${timeAgo}</div>
+            <div class="activity-content">
+              <div class="activity-icon risk-${activity.risk}">
+                <i class="fas ${permission?.icon || 'fa-cog'}"></i>
+              </div>
+              <div>
+                <strong>${activity.appName}</strong> ${activity.action}
+                <br><small>${permission?.description || 'System access'}</small>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function formatTimeAgo(timestamp) {
+      const now = Date.now();
+      const diff = now - timestamp;
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      
+      if (seconds < 60) return 'Just now';
+      if (minutes < 60) return `${minutes}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      return 'More than a day ago';
+    }
+
+    // App interaction functions
+    function openAppModal(appName) {
+      const app = privacyState.apps[appName];
+      if (!app) return;
+      
+      privacyState.currentAppModal = appName;
+      privacyState.pendingPermissionChanges = {};
+      
+      const modal = document.getElementById('appModal');
+      
+      document.getElementById('modalAppIcon').className = `fas ${app.icon}`;
+      document.getElementById('modalAppName').textContent = appName;
+      document.getElementById('modalAppScore').textContent = app.score + '%';
+      document.getElementById('modalScoreProgress').style.width = app.score + '%';
+      
+      const permissionsContainer = document.getElementById('modalPermissions');
+      permissionsContainer.innerHTML = app.permissions.map((permission, index) => {
+        const config = permissionConfig[permission.name];
+        
+        return `
+          <div class="permission-item">
+            <div class="permission-info">
+              <div class="permission-icon">
+                <i class="fas ${config.icon}"></i>
+              </div>
+              <div class="permission-details">
+                <h4>${permission.name}</h4>
+                <p>${config.description}</p>
+              </div>
+            </div>
+            <div class="permission-controls">
+              <span class="app-risk risk-${permission.risk}">${permission.risk}</span>
+              <label class="toggle">
+                <input type="checkbox" ${permission.enabled ? 'checked' : ''} 
+                       onchange="toggleModalPermission('${appName}', '${permission.name}', this.checked, ${index})">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // Add context-aware options
+      const contextAwareContainer = document.getElementById('contextAwareOptions');
+      contextAwareContainer.innerHTML = app.permissions.map((permission, index) => {
+        const contextDesc = contextAwareDescriptions[permission.name];
+        if (!contextDesc) return '';
+        
+        return `
+          <div class="permission-item" style="margin-bottom: 1rem;">
+            <div class="permission-info">
+              <div class="permission-icon">
+                <i class="fas ${permissionConfig[permission.name].icon}"></i>
+              </div>
+              <div class="permission-details">
+                <h4>${permission.name} - Context-Aware Mode</h4>
+                <p style="margin-bottom: 0.5rem;"><strong>Traditional:</strong> ${contextDesc.traditional}</p>
+                <p><strong>Context-Aware:</strong> ${contextDesc.contextAware}</p>
+              </div>
+            </div>
+            <div class="permission-controls">
+              <label class="toggle">
+                <input type="checkbox" ${permission.contextAware ? 'checked' : ''} 
+                       onchange="toggleContextAware('${appName}', '${permission.name}', this.checked, ${index})">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        `;
+      }).filter(html => html).join('');
+      
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('appModal').classList.remove('active');
+      privacyState.currentAppModal = null;
+      privacyState.pendingPermissionChanges = {};
+    }
+
+    function toggleModalPermission(appName, permissionName, enabled, index) {
+      // Store the change in pending changes
+      if (!privacyState.pendingPermissionChanges[appName]) {
+        privacyState.pendingPermissionChanges[appName] = {};
+      }
+      
+      privacyState.pendingPermissionChanges[appName][permissionName] = enabled;
+      
+      // Show toast notification
+      showToast(
+        enabled ? 'Permission Enabled' : 'Permission Disabled',
+        `${permissionName} permission for ${appName} will be ${enabled ? 'enabled' : 'disabled'} after saving.`,
+        enabled ? 'info' : 'warning'
+      );
+    }
+
+    function toggleContextAware(appName, permissionName, enabled, index) {
+      const app = privacyState.apps[appName];
+      const permission = app.permissions.find(p => p.name === permissionName);
+      if (permission) {
+        permission.contextAware = enabled;
+        
+        showToast(
+          enabled ? 'Context-Aware Enabled' : 'Context-Aware Disabled',
+          `${permissionName} is now ${enabled ? 'context-aware' : 'traditional'} for ${appName}.`,
+          'info'
+        );
+      }
+    }
+
+    function savePermissionChanges() {
+      const appName = privacyState.currentAppModal;
+      if (!appName || !privacyState.pendingPermissionChanges[appName]) {
+        closeModal();
+        return;
+      }
+      
+      const app = privacyState.apps[appName];
+      let scoreChange = 0;
+      
+      // Apply all pending changes
+      for (const [permissionName, enabled] of Object.entries(privacyState.pendingPermissionChanges[appName])) {
+        const permission = app.permissions.find(p => p.name === permissionName);
+        if (permission) {
+          const oldValue = permission.enabled;
+          permission.enabled = enabled;
+          
+          // Log the activity
+          if (oldValue !== enabled) {
+            const action = enabled ? 'granted permission for' : 'revoked permission for';
+            addActivity(appName, permissionName, `${action} ${permissionName.toLowerCase()}`);
+            
+            // Calculate score impact
+            const riskImpact = {
+              high: enabled ? -5 : +5,
+              medium: enabled ? -3 : +3,
+              low: enabled ? -1 : +1
+            };
+            
+            scoreChange += riskImpact[permission.risk];
+          }
+        }
+      }
+      
+      // Update app score
+      app.score = Math.max(0, Math.min(100, app.score + scoreChange));
+      
+      // Update overall privacy score
+      const newScore = Math.max(0, Math.min(100, privacyState.currentScore + Math.floor(scoreChange / 2)));
+      updatePrivacyScore(newScore);
+      
+      // Update stats
+      updateStats();
+      
+      // Update app grid
+      renderApps();
+      
+      // Show success toast
+      showToast(
+        'Changes Saved',
+        `Permission changes for ${appName} have been applied successfully.`,
+        'success'
+      );
+      
+      // Update contextual privacy tip
+      updatePrivacyTip();
+      
+      // Close modal
+      closeModal();
+    }
+
+    // Simulation functions
+    function simulateActivity() {
+      const apps = Object.keys(privacyState.apps);
+      const randomApp = apps[Math.floor(Math.random() * apps.length)];
+      const app = privacyState.apps[randomApp];
+      
+      // Find enabled permissions
+      const enabledPermissions = app.permissions.filter(p => p.enabled);
+      if (enabledPermissions.length === 0) {
+        showToast('No Enabled Permissions', `${randomApp} has no enabled permissions to simulate.`, 'warning');
+        return;
+      }
+      
+      const randomPermission = enabledPermissions[Math.floor(Math.random() * enabledPermissions.length)];
+      
+      // Update last used time
+      randomPermission.lastUsed = 'Just now';
+      
+      // Add activity
+      addActivity(randomApp, randomPermission.name, `accessed your ${randomPermission.name.toLowerCase()}`);
+      
+      // Simulate privacy score change
+      const riskImpact = { high: -2, medium: -1, low: 0 };
+      const scoreChange = riskImpact[randomPermission.risk];
+      const newScore = Math.max(0, Math.min(100, privacyState.currentScore + scoreChange));
+      
+      updatePrivacyScore(newScore);
+      
+      // Update app status
+      app.active = true;
+      
+      // Update stats
+      updateStats();
+      
+      // Update contextual privacy tip
+      updatePrivacyTip();
+      
+      // Show toast
+      showToast(
+        'Activity Simulated',
+        `${randomApp} accessed your ${randomPermission.name.toLowerCase()}.`,
+        'info'
+      );
+      
+      console.log(`Simulated: ${randomApp} accessed ${randomPermission.name}`);
+    }
+
+    // Toast notification function
+    function showToast(title, message, type = 'info') {
+      const toastContainer = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      const iconClass = {
+        success: 'fa-check-circle',
+        warning: 'fa-exclamation-triangle',
+        error: 'fa-times-circle',
+        info: 'fa-info-circle'
+      }[type];
+      
+      toast.innerHTML = `
+        <div class="toast-icon ${type}">
+          <i class="fas ${iconClass}"></i>
+        </div>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        if (toast.parentElement) {
+          toast.remove();
+        }
+      }, 5000);
+    }
+
+    // Notification functions
+    function openNotifications() {
+      document.getElementById('notificationPanel').classList.add('active');
+    }
+
+    function closeNotifications() {
+      document.getElementById('notificationPanel').classList.remove('active');
+    }
+
+    function dismissNotification(button) {
+      const notificationItem = button.closest('.notification-item');
+      notificationItem.style.height = notificationItem.offsetHeight + 'px';
+      notificationItem.style.opacity = '1';
+      
+      // Animate out
+      setTimeout(() => {
+        notificationItem.style.height = '0';
+        notificationItem.style.opacity = '0';
+        notificationItem.style.padding = '0';
+        notificationItem.style.margin = '0';
+        notificationItem.style.overflow = 'hidden';
+        notificationItem.style.transition = 'all 0.3s ease';
+      }, 10);
+      
+      // Remove after animation
+      setTimeout(() => {
+        notificationItem.remove();
+        
+        // Update notification count
+        privacyState.notifications--;
+        if (privacyState.notifications < 0) privacyState.notifications = 0;
+        
+        document.getElementById('notificationBtn').setAttribute('data-count', privacyState.notifications);
+        
+        // If no more notifications, add empty state
+        const panel = document.getElementById('notificationPanel');
+        if (panel.querySelectorAll('.notification-item').length === 0) {
+          panel.innerHTML += `
+            <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+              <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+              <p>No new notifications</p>
+            </div>
+          `;
+        }
+      }, 300);
+    }
+
+    // Theme functions
+    function toggleDarkMode() {
+      privacyState.darkMode = !privacyState.darkMode;
+      document.body.setAttribute('data-theme', privacyState.darkMode ? 'dark' : 'light');
+      
+      const icon = document.querySelector('#darkModeToggle i');
+      icon.className = privacyState.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+      
+      // Update settings toggle
+      document.getElementById('darkModeSettingToggle').checked = privacyState.darkMode;
+      
+      // Show toast
+      showToast(
+        privacyState.darkMode ? 'Dark Mode Enabled' : 'Light Mode Enabled',
+        `Switched to ${privacyState.darkMode ? 'dark' : 'light'} theme.`,
+        'info'
+      );
+    }
+
+    function toggleDarkModeFromSettings() {
+      toggleDarkMode();
+    }
+
+    // Export function
+    function exportData() {
+      const exportData = {
+        privacyScore: privacyState.currentScore,
+        apps: privacyState.apps,
+        activityLog: privacyState.activityLog,
+        settings: privacyState.settings,
+        exportDate: new Date().toISOString(),
+        encryptionStatus: 'AES-256 Encrypted'
+      };
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `privacy-report-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showToast('Data Exported', 'Your privacy data has been exported successfully.', 'success');
+    }
+
+    // Settings functions
+    function openSettings() {
+      document.getElementById('settingsModal').classList.add('active');
+      
+      // Update settings UI with current values
+      document.getElementById('darkModeSettingToggle').checked = privacyState.darkMode;
+    }
+
+    function switchSettingsTab(tabName) {
+      // Remove active class from all tabs and contents
+      document.querySelectorAll('.settings-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.settings-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to clicked tab and corresponding content
+      event.target.classList.add('active');
+      document.getElementById(tabName + '-settings').classList.add('active');
+    }
+
+    function saveSettings() {
+      showToast('Settings Saved', 'Your settings have been saved successfully.', 'success');
+      closeCustomModal('settingsModal');
+    }
+
+    function resetSettings() {
+      if (confirm('Are you sure you want to reset all settings to default? This cannot be undone.')) {
+        // Reset settings to default
+        privacyState.settings = {
+          enhancedMonitoring: true,
+          contextAwarePermissions: true,
+          autoPrivacyMode: false,
+          realTimeAlerts: true,
+          weeklySummary: true,
+          aiSuggestions: true,
+          highRiskNotifications: true,
+          backgroundNotifications: true,
+          scoreNotifications: false,
+          compactView: false,
+          autoExport: true,
+          debugMode: false,
+          apiAccess: false,
+          secureBoot: true,
+          encryptionLevel: 'aes256',
+          dataRetention: 30,
+          highRiskThreshold: 60,
+          mediumRiskThreshold: 40
+        };
+        
+        showToast('Settings Reset', 'All settings have been reset to default values.', 'success');
+      }
+    }
+
+    function clearActivityLog() {
+      if (confirm('Are you sure you want to clear all activity logs? This cannot be undone.')) {
+        privacyState.activityLog = [];
+        updateActivityTimeline();
+        showToast('Activity Log Cleared', 'All activity logs have been cleared.', 'success');
+      }
+    }
+
+    function factoryReset() {
+      if (confirm('Are you sure you want to perform a factory reset? This will delete ALL data and cannot be undone.')) {
+        if (confirm('This is your final warning. ALL DATA WILL BE LOST. Continue?')) {
+          // Reset everything
+          location.reload();
+        }
+      }
+    }
+
+    // Settings toggle functions
+    function toggleCompactView() {
+      privacyState.settings.compactView = !privacyState.settings.compactView;
+      showToast('Compact View', `Compact view ${privacyState.settings.compactView ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleAutoExport() {
+      privacyState.settings.autoExport = !privacyState.settings.autoExport;
+      showToast('Auto-Export', `Auto-export ${privacyState.settings.autoExport ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleEnhancedMonitoring() {
+      privacyState.settings.enhancedMonitoring = !privacyState.settings.enhancedMonitoring;
+      showToast('Enhanced Monitoring', `Enhanced monitoring ${privacyState.settings.enhancedMonitoring ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleContextAware() {
+      privacyState.settings.contextAwarePermissions = !privacyState.settings.contextAwarePermissions;
+      showToast('Context-Aware Permissions', `Context-aware permissions ${privacyState.settings.contextAwarePermissions ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleAutoPrivacyMode() {
+      privacyState.settings.autoPrivacyMode = !privacyState.settings.autoPrivacyMode;
+      showToast('Auto Privacy Mode', `Auto privacy mode ${privacyState.settings.autoPrivacyMode ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleRealTimeAlerts() {
+      privacyState.settings.realTimeAlerts = !privacyState.settings.realTimeAlerts;
+      showToast('Real-time Alerts', `Real-time alerts ${privacyState.settings.realTimeAlerts ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleWeeklySummary() {
+      privacyState.settings.weeklySummary = !privacyState.settings.weeklySummary;
+      showToast('Weekly Summary', `Weekly summary ${privacyState.settings.weeklySummary ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleAISuggestions() {
+      privacyState.settings.aiSuggestions = !privacyState.settings.aiSuggestions;
+      showToast('AI Suggestions', `AI suggestions ${privacyState.settings.aiSuggestions ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleHighRiskNotifications() {
+      privacyState.settings.highRiskNotifications = !privacyState.settings.highRiskNotifications;
+      showToast('High Risk Notifications', `High risk notifications ${privacyState.settings.highRiskNotifications ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleBackgroundNotifications() {
+      privacyState.settings.backgroundNotifications = !privacyState.settings.backgroundNotifications;
+      showToast('Background Notifications', `Background notifications ${privacyState.settings.backgroundNotifications ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleScoreNotifications() {
+      privacyState.settings.scoreNotifications = !privacyState.settings.scoreNotifications;
+      showToast('Score Notifications', `Score notifications ${privacyState.settings.scoreNotifications ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleDebugMode() {
+      privacyState.settings.debugMode = !privacyState.settings.debugMode;
+      showToast('Debug Mode', `Debug mode ${privacyState.settings.debugMode ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleAPIAccess() {
+      privacyState.settings.apiAccess = !privacyState.settings.apiAccess;
+      showToast('API Access', `API access ${privacyState.settings.apiAccess ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function toggleSecureBoot() {
+      privacyState.settings.secureBoot = !privacyState.settings.secureBoot;
+      showToast('Secure Boot', `Secure boot ${privacyState.settings.secureBoot ? 'enabled' : 'disabled'}.`, 'info');
+    }
+
+    function updateRiskThreshold(type, value) {
+      if (type === 'high') {
+        privacyState.settings.highRiskThreshold = parseInt(value);
+        document.getElementById('highRiskValue').textContent = value + '%';
+      } else if (type === 'medium') {
+        privacyState.settings.mediumRiskThreshold = parseInt(value);
+        document.getElementById('mediumRiskValue').textContent = value + '%';
+      }
+    }
+
+    // Privacy education functions
+    function switchPrivacyTab(tabName) {
+      // Remove active class from all tabs and contents
+      document.querySelectorAll('.privacy-education-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.privacy-education-content').forEach(content => content.classList.remove('active'));
+      
+      // Add active class to clicked tab and corresponding content
+      event.target.classList.add('active');
+      document.getElementById(tabName + '-content').classList.add('active');
+    }
+
+    // Quick action functions
+    function reviewPermissions() {
+      const modal = document.getElementById('reviewPermissionsModal');
+      const permissionsList = document.getElementById('allPermissionsList');
+      
+      // Clear previous content
+      permissionsList.innerHTML = '';
+      
+      // Group by permission type
+      const permissionsByType = {};
+      
+      for (const [appName, app] of Object.entries(privacyState.apps)) {
+        app.permissions.forEach(permission => {
+          if (!permissionsByType[permission.name]) {
+            permissionsByType[permission.name] = [];
+          }
+          
+          permissionsByType[permission.name].push({
+            appName,
+            enabled: permission.enabled,
+            risk: permission.risk,
+            lastUsed: permission.lastUsed,
+            contextAware: permission.contextAware
           });
-      }));
+        });
+      }
+      
+      // Create sections for each permission type
+      for (const [permissionName, apps] of Object.entries(permissionsByType)) {
+        const config = permissionConfig[permissionName];
+        
+        const section = document.createElement('div');
+        section.className = 'permission-section';
+        section.innerHTML = `
+          <h4 style="margin: 1.5rem 0 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas ${config.icon}" style="color: var(--primary-color);"></i>
+            ${permissionName} Permission
+          </h4>
+          <p style="margin-bottom: 1rem; color: var(--text-secondary);">${config.description}</p>
+        `;
+        
+        const appsList = document.createElement('div');
+        appsList.style.display = 'grid';
+        appsList.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
+        appsList.style.gap = '1rem';
+        
+        apps.forEach(app => {
+          const appItem = document.createElement('div');
+          appItem.className = 'permission-item';
+          appItem.style.padding = '0.75rem';
+          
+          appItem.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas ${privacyState.apps[app.appName].icon}" style="color: var(--primary-color);"></i>
+                <span>${app.appName}</span>
+                ${app.contextAware ? '<i class="fas fa-magic" style="color: var(--success-color); font-size: 0.75rem;" title="Context-Aware"></i>' : ''}
+              </div>
+              <span class="app-risk risk-${app.risk}">${app.risk}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+              <small style="color: var(--text-secondary);">Last used: ${app.lastUsed}</small>
+              <label class="toggle">
+                <input type="checkbox" ${app.enabled ? 'checked' : ''} 
+                       onchange="toggleBulkPermission('${app.appName}', '${permissionName}', this.checked)">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          `;
+          
+          appsList.appendChild(appItem);
+        });
+        
+        section.appendChild(appsList);
+        permissionsList.appendChild(section);
+      }
+      
+      modal.classList.add('active');
+    }
 
-    // Hamburger
-    const hamburgerToggle = document.getElementById('hamburgerToggle');
-    const hamburgerMenu   = document.getElementById('hamburgerMenu');
-    hamburgerToggle.addEventListener('click', () => hamburgerMenu.classList.toggle('hidden'));
-    window.addEventListener('click', e => { if(!hamburgerToggle.contains(e.target)&&!hamburgerMenu.contains(e.target)) hamburgerMenu.classList.add('hidden'); });
+    function toggleBulkPermission(appName, permissionName, enabled) {
+      // Store the change in pending changes
+      if (!privacyState.pendingPermissionChanges[appName]) {
+        privacyState.pendingPermissionChanges[appName] = {};
+      }
+      
+      privacyState.pendingPermissionChanges[appName][permissionName] = enabled;
+    }
 
-    // Live search & toggle more
-    const searchInput = document.getElementById('appSearch');
-    const appCards    = Array.from(document.querySelectorAll('.app-card'));
-    const toggleBtn   = document.getElementById('toggleMore');
+    function saveAllPermissions() {
+      let totalScoreChange = 0;
+      
+      // Apply all pending changes
+      for (const [appName, permissions] of Object.entries(privacyState.pendingPermissionChanges)) {
+        const app = privacyState.apps[appName];
+        let appScoreChange = 0;
+        
+        for (const [permissionName, enabled] of Object.entries(permissions)) {
+          const permission = app.permissions.find(p => p.name === permissionName);
+          if (permission) {
+            const oldValue = permission.enabled;
+            permission.enabled = enabled;
+            
+            // Log the activity
+            if (oldValue !== enabled) {
+              const action = enabled ? 'granted permission for' : 'revoked permission for';
+              addActivity(appName, permissionName, `${action} ${permissionName.toLowerCase()}`);
+              
+              // Calculate score impact
+              const riskImpact = {
+                high: enabled ? -5 : +5,
+                medium: enabled ? -3 : +3,
+                low: enabled ? -1 : +1
+              };
+              
+              appScoreChange += riskImpact[permission.risk];
+            }
+          }
+        }
+        
+        // Update app score
+        app.score = Math.max(0, Math.min(100, app.score + appScoreChange));
+        totalScoreChange += appScoreChange;
+      }
+      
+      // Update overall privacy score
+      const newScore = Math.max(0, Math.min(100, privacyState.currentScore + Math.floor(totalScoreChange / 4)));
+      updatePrivacyScore(newScore);
+      
+      // Update stats
+      updateStats();
+      
+      // Update app grid
+      renderApps();
+      
+      // Show success toast
+      showToast(
+        'All Changes Saved',
+        `Permission changes have been applied successfully.`,
+        'success'
+      );
+      
+      // Update contextual privacy tip
+      updatePrivacyTip();
+      
+      // Close modal
+      closeCustomModal('reviewPermissionsModal');
+      
+      // Clear pending changes
+      privacyState.pendingPermissionChanges = {};
+    }
 
-    function collapseExtras() {document.querySelectorAll('.extra').forEach(e=>e.classList.add('hidden')); toggleBtn.textContent='Show more'; toggleBtn.classList.remove('expanded');}
-    function expandExtras()  {document.querySelectorAll('.extra').forEach(e=>e.classList.remove('hidden')); toggleBtn.textContent='Show less'; toggleBtn.classList.add('expanded');}
-    collapseExtras();
+    function enablePrivacyMode() {
+      document.getElementById('privacyModeModal').classList.add('active');
+    }
 
-    searchInput.addEventListener('input', ()=>{
-      const q=searchInput.value.trim().toLowerCase();
-      appCards.forEach(card=>{card.style.display=card.dataset.name.toLowerCase().includes(q)?'flex':'none';});
-      toggleBtn.style.display=q?'none':'block';
-      if(!q&&!toggleBtn.classList.contains('expanded')) collapseExtras();
-    });
-    toggleBtn.addEventListener('click', ()=>toggleBtn.classList.contains('expanded')?collapseExtras():expandExtras());
+    function activatePrivacyMode() {
+      // Disable all high-risk permissions
+      let totalScoreChange = 0;
+      
+      for (const [appName, app] of Object.entries(privacyState.apps)) {
+        let appScoreChange = 0;
+        
+        app.permissions.forEach(permission => {
+          if (permission.risk === 'high' && permission.enabled) {
+            permission.enabled = false;
+            
+            // Log the activity
+            addActivity(appName, permission.name, `revoked permission for ${permission.name.toLowerCase()} (Privacy Mode)`);
+            
+            // Calculate score impact
+            appScoreChange += 5; // +5 for disabling high-risk permission
+          }
+        });
+        
+        // Update app score
+        app.score = Math.max(0, Math.min(100, app.score + appScoreChange));
+        totalScoreChange += appScoreChange;
+      }
+      
+      // Update overall privacy score
+      const newScore = Math.max(0, Math.min(100, privacyState.currentScore + Math.floor(totalScoreChange / 4)));
+      updatePrivacyScore(newScore);
+      
+      // Update stats
+      updateStats();
+      
+      // Update app grid
+      renderApps();
+      
+      // Show success toast
+      showToast(
+        'Privacy Mode Enabled',
+        'All high-risk permissions have been disabled. Your privacy score has improved!',
+        'success'
+      );
+      
+      // Update contextual privacy tip
+      updatePrivacyTip();
+      
+      // Close modal
+      closeCustomModal('privacyModeModal');
+      
+      // Add AI message
+      addAiMessage('Privacy Mode has been activated! I\'ve disabled all high-risk permissions to enhance your privacy. Your privacy score has improved significantly.', [
+        { text: 'View changes', action: 'aiViewChanges' },
+        { text: 'Explain impact', action: 'aiExplainPrivacyMode' }
+      ]);
+    }
 
-    // App Detail Panel logic
-    const detailPanel = document.getElementById('appDetail');
-    const closeDetail = document.getElementById('closeDetail');
-    const appData = { /* sample data as before */ Phone:{risk:'Low', lastUsed:'Today, 10:32 AM', permissions:[{name:'Camera', icon:'fa-camera', granted:true, lastAccess:'1h ago'},{name:'Microphone', icon:'fa-microphone', granted:false, lastAccess:'—'},{name:'Contacts', icon:'fa-address-book', granted:true, lastAccess:'Yesterday'}], history:[2,5,3,4,6,1,0], dataFlow:'Sends crash logs to crash.example.com every launch.'} };
-    document.querySelectorAll('.app-card').forEach(card=>card.addEventListener('click',()=>{
-      const name=card.dataset.name, info=appData[name]; if(!info) return;
-      document.getElementById('detailName').textContent=name;
-      document.getElementById('detailRisk').textContent=info.risk;
-      document.getElementById('detailLastUsed').textContent=info.lastUsed;
-      document.querySelector('.app-detail-icon i').className=`fas ${card.querySelector('i').classList[1]}`;
-      const permList=document.getElementById('permList'); permList.innerHTML='';
-      info.permissions.forEach(p=>{const li=document.createElement('li');li.innerHTML=`<div><i class="fas ${p.icon}"></i> <span>${p.name}</span></div><div><label class="switch"><input type="checkbox" ${p.granted?'checked':''}><span class="slider round"></span></label><small>Last accessed: ${p.lastAccess}</small></div>`;permList.appendChild(li);});
-      const ctx=document.getElementById('historyChart').getContext('2d'); if(window._historyChart) window._historyChart.destroy(); window._historyChart=new Chart(ctx,{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{label:'Accesses',data:info.history}]},options:{maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}});
-      document.getElementById('dataFlow').textContent=info.dataFlow;
-      detailPanel.classList.add('show');
-    }));
-    closeDetail.addEventListener('click',()=>detailPanel.classList.remove('show'));
+    function generateReport() {
+      document.getElementById('reportModal').classList.add('active');
+    }
+
+    function downloadReport() {
+      const format = document.querySelector('input[name="reportFormat"]:checked').value;
+      
+      // Show loading toast
+      showToast('Generating Report', `Creating your privacy report in ${format.toUpperCase()} format...`, 'info');
+      
+      // Simulate processing
+      setTimeout(() => {
+        // Create dummy data
+        let data;
+        let mimeType;
+        let extension;
+        
+        switch (format) {
+          case 'pdf':
+            // In a real app, this would generate a PDF
+            data = 'PDF data would be generated here';
+            mimeType = 'application/pdf';
+            extension = 'pdf';
+            break;
+          case 'csv':
+            data = 'App,Permission,Status,Risk Level,Context-Aware\n';
+            for (const [appName, app] of Object.entries(privacyState.apps)) {
+              app.permissions.forEach(permission => {
+                data += `${appName},${permission.name},${permission.enabled ? 'Enabled' : 'Disabled'},${permission.risk},${permission.contextAware ? 'Yes' : 'No'}\n`;
+              });
+            }
+            mimeType = 'text/csv';
+            extension = 'csv';
+            break;
+          case 'json':
+            data = JSON.stringify({
+              privacyScore: privacyState.currentScore,
+              apps: privacyState.apps,
+              activityLog: privacyState.activityLog,
+              settings: privacyState.settings,
+              exportDate: new Date().toISOString()
+            }, null, 2);
+            mimeType = 'application/json';
+            extension = 'json';
+            break;
+        }
+        
+        // Create download
+        const blob = new Blob([data], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `privacy-report-${Date.now()}.${extension}`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        // Show success toast
+        showToast('Report Generated', `Your privacy report has been downloaded in ${format.toUpperCase()} format.`, 'success');
+        
+        // Close modal
+        closeCustomModal('reportModal');
+      }, 1500);
+    }
+
+    function showPrivacyTips() {
+      document.getElementById('privacyTipsModal').classList.add('active');
+    }
+
+    // Custom modal functions
+    function closeCustomModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    // Chart initialization
+    function initChart() {
+      const ctx = document.getElementById('privacyChart').getContext('2d');
+      
+      // Start with empty data
+      window.privacyChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Privacy Score',
+            data: [],
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: '#4f46e5',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 0,
+              max: 100,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function updateChart() {
+      if (window.privacyChart) {
+        const now = new Date();
+        const timeLabel = now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+        
+        window.privacyChart.data.labels.push(timeLabel);
+        window.privacyChart.data.datasets[0].data.push(privacyState.currentScore);
+        
+        // Keep only the last 10 data points
+        if (window.privacyChart.data.labels.length > 10) {
+          window.privacyChart.data.labels.shift();
+          window.privacyChart.data.datasets[0].data.shift();
+        }
+        
+        window.privacyChart.update();
+      }
+    }
+
+    // Stats functions
+    function updateStats() {
+      // Count active permissions
+      let activePermissions = 0;
+      let riskAlerts = 0;
+      
+      for (const app of Object.values(privacyState.apps)) {
+        app.permissions.forEach(permission => {
+          if (permission.enabled) {
+            activePermissions++;
+            if (permission.risk === 'high') {
+              riskAlerts++;
+            }
+          }
+        });
+      }
+      
+      // Update stats display with animation
+      animateStatChange('activePermissions', activePermissions);
+      animateStatChange('riskAlerts', riskAlerts);
+      
+      // Total apps is fixed
+      document.getElementById('totalApps').textContent = Object.keys(privacyState.apps).length;
+    }
+
+    function animateStatChange(elementId, newValue) {
+      const element = document.getElementById(elementId);
+      const currentValue = parseInt(element.textContent);
+      
+      if (currentValue !== newValue) {
+        // Add highlight effect
+        document.getElementById(elementId + 'Card').classList.add('highlight');
+        
+        // Animate number change
+        let start = currentValue;
+        const step = newValue > currentValue ? 1 : -1;
+        const duration = 500; // ms
+        const steps = Math.abs(newValue - currentValue);
+        const stepTime = steps > 0 ? duration / steps : duration;
+        
+        function animate() {
+          if (start !== newValue) {
+            start += step;
+            element.textContent = start;
+            setTimeout(animate, stepTime);
+          }
+        }
+        
+        animate();
+        
+        // Remove highlight after animation
+        setTimeout(() => {
+          document.getElementById(elementId + 'Card').classList.remove('highlight');
+        }, duration + 200);
+      }
+    }
+
+    function incrementDataPoints() {
+      privacyState.dataPoints++;
+      document.getElementById('dataPoints').textContent = privacyState.dataPoints;
+    }
+
+    // Privacy tip functions
+    function updatePrivacyTip() {
+      // Find the most recently used permission
+      let recentPermission = null;
+      let recentApp = null;
+      
+      if (privacyState.activityLog.length > 0) {
+        const recentActivity = privacyState.activityLog[0];
+        recentPermission = recentActivity.permission;
+        recentApp = recentActivity.appName;
+      }
+      
+      // Find a relevant tip
+      let tip;
+      const privacyTips = [
+        {
+          permission: 'Location',
+          tip: 'Location data can reveal your daily routines. Consider disabling location access for apps that don\'t need it for core functionality.',
+          icon: 'fa-map-marker-alt'
+        },
+        {
+          permission: 'Camera',
+          tip: 'Camera access allows apps to take photos and videos. Only enable for trusted apps when necessary.',
+          icon: 'fa-camera'
+        },
+        {
+          permission: 'Microphone',
+          tip: 'Apps with microphone access can record audio anytime the app is open. Review these permissions regularly.',
+          icon: 'fa-microphone'
+        },
+        {
+          permission: 'Contacts',
+          tip: 'Contact access gives apps your entire address book. Be selective about which apps can access this sensitive information.',
+          icon: 'fa-address-book'
+        },
+        {
+          permission: 'Storage',
+          tip: 'Storage permissions allow apps to read and write files on your device. This could include personal photos and documents.',
+          icon: 'fa-hdd'
+        }
+      ];
+      
+      if (recentPermission) {
+        tip = privacyTips.find(t => t.permission === recentPermission);
+      }
+      
+      // If no relevant tip found, pick a random one
+      if (!tip) {
+        tip = privacyTips[Math.floor(Math.random() * privacyTips.length)];
+      }
+      
+      // Update the tip content
+      const tipContent = document.getElementById('privacyTipContent');
+      tipContent.innerHTML = `
+        <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5;">
+          <strong>Did you know?</strong> ${tip.tip}
+          ${recentApp ? `<br><br><em>Relevant to recent activity in ${recentApp}.</em>` : ''}
+        </p>
+        <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;" onclick="showPrivacyTips()">
+          Learn More
+        </button>
+      `;
+    }
+
+    // AI Assistant functions
+    function toggleAiAssistant() {
+      const aiChat = document.getElementById('aiChat');
+      const aiToggle = document.getElementById('aiToggle');
+      
+      if (aiChat.classList.contains('active')) {
+        aiChat.classList.remove('active');
+        aiToggle.classList.remove('active');
+      } else {
+        aiChat.classList.add('active');
+        aiToggle.classList.add('active');
+        document.getElementById('aiMessages').scrollTop = document.getElementById('aiMessages').scrollHeight;
+      }
+    }
+
+    function addAiMessage(message, actions = []) {
+      const messagesContainer = document.getElementById('aiMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'ai-message';
+      
+      let actionsHtml = '';
+      if (actions && actions.length > 0) {
+        actionsHtml = `
+          <div class="ai-actions">
+            ${actions.map(action => `
+              <button class="ai-action-btn" onclick="${action.action}()">${action.text}</button>
+            `).join('')}
+          </div>
+        `;
+      }
+      
+      messageDiv.innerHTML = `
+        <div class="ai-message-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="ai-message-content">
+          <p>${message}</p>
+          ${actionsHtml}
+        </div>
+      `;
+      
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      
+      // Open AI chat if closed
+      if (!document.getElementById('aiChat').classList.contains('active')) {
+        toggleAiAssistant();
+      }
+    }
+
+    function addUserMessage(message) {
+      const messagesContainer = document.getElementById('aiMessages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'ai-message user';
+      
+      messageDiv.innerHTML = `
+        <div class="ai-message-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="ai-message-content">
+          <p>${message}</p>
+        </div>
+      `;
+      
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function sendAiMessage() {
+      const input = document.getElementById('aiInput');
+      const message = input.value.trim();
+      
+      if (message) {
+        addUserMessage(message);
+        input.value = '';
+        
+        // Process user message
+        setTimeout(() => {
+          const response = generateAIResponse(message);
+          addAiMessage(response);
+        }, 500);
+      }
+    }
+
+    // AI action functions
+    function aiNewUserGuide() {
+      addAiMessage(`Welcome to PrivacyGuard! Let me give you a quick tour:
+
+🎯 **Your Privacy Score**: Currently ${privacyState.currentScore}% - this shows how well your privacy is protected
+📱 **Your Apps**: I monitor ${Object.keys(privacyState.apps).length} default apps and their permissions
+⚠️ **Risk Levels**: Apps are marked as Low, Medium, or High risk based on their permissions
+
+**Quick Start Tips**:
+1. Click "Simulate Activity" to see how app usage affects your score
+2. Click any app to review its permissions
+3. Try "Enable Privacy Mode" for instant protection
+
+What would you like to explore first?`, [
+        { text: 'Simulate some activity', action: 'simulateActivity' },
+        { text: 'Review my apps', action: 'aiAnalyzeApps' },
+        { text: 'Enable Privacy Mode', action: 'enablePrivacyMode' },
+        { text: 'Explain my score', action: 'aiExplainScore' }
+      ]);
+    }
+
+    function aiExplainScore() {
+      const score = privacyState.currentScore;
+      const totalPermissions = Object.values(privacyState.apps).reduce((total, app) => total + app.permissions.length, 0);
+      const enabledPermissions = Object.values(privacyState.apps).reduce((total, app) => total + app.permissions.filter(p => p.enabled).length, 0);
+      const highRiskEnabled = Object.values(privacyState.apps).reduce((total, app) => total + app.permissions.filter(p => p.enabled && p.risk === 'high').length, 0);
+      const contextAwareEnabled = Object.values(privacyState.apps).reduce((total, app) => total + app.permissions.filter(p => p.contextAware).length, 0);
+
+      let scoreCategory, scoreColor, advice;
+      if (score >= 90) {
+        scoreCategory = 'Excellent';
+        scoreColor = '🟢';
+        advice = 'Your privacy is very well protected! Keep monitoring for any changes.';
+      } else if (score >= 80) {
+        scoreCategory = 'Very Good';
+        scoreColor = '🟢';
+        advice = 'Great privacy protection with room for minor improvements.';
+      } else if (score >= 70) {
+        scoreCategory = 'Good';
+        scoreColor = '🟡';
+        advice = 'Solid privacy protection, but some optimizations could help.';
+      } else if (score >= 60) {
+        scoreCategory = 'Fair';
+        scoreColor = '🟡';
+        advice = 'Your privacy needs attention. Consider reviewing high-risk permissions.';
+      } else {
+        scoreCategory = 'Poor';
+        scoreColor = '🔴';
+        advice = 'Your privacy is at risk! Immediate action recommended.';
+      }
+
+      addAiMessage(`${scoreColor} **Your Privacy Score: ${score}% (${scoreCategory})**
+
+**How it's calculated**:
+• Total permissions: ${totalPermissions}
+• Currently enabled: ${enabledPermissions}
+• High-risk enabled: ${highRiskEnabled}
+• Context-aware permissions: ${contextAwareEnabled}
+
+**Score factors**:
+✅ Disabled high-risk permissions boost your score
+⚠️ Enabled high-risk permissions lower your score
+🎯 Context-aware permissions provide bonus points
+📱 App-specific risk levels matter
+🔄 Recent permission changes are tracked
+
+**${advice}**
+
+The score updates in real-time as you change permissions or apps access your data.`, [
+        { text: 'How to improve?', action: 'aiSuggestImprovements' },
+        { text: 'What are high-risk permissions?', action: 'aiAnalyzeRisks' },
+        { text: 'Review my apps', action: 'aiAnalyzeApps' }
+      ]);
+    }
+
+    function aiShowCapabilities() {
+      addAiMessage(`I'm your personal Privacy AI Assistant! Here's what I can help you with:
+
+📊 **Privacy Analysis**: Check your privacy score and get personalized recommendations
+🔒 **Permission Management**: Understand what each permission does and which ones to disable
+⚠️ **Risk Assessment**: Identify potential privacy risks in your apps
+📱 **App Guidance**: Get advice about specific apps and their privacy impact
+🎓 **Privacy Education**: Learn about digital privacy and best practices
+🛡️ **Quick Fixes**: Enable Privacy Mode or bulk permission changes
+🎯 **Context-Aware Features**: Learn about PrivacyGuard's unique context-aware permissions
+
+Just ask me questions like "What's my privacy score?" or "Which apps are risky?" - I understand natural language!`, [
+        { text: 'Analyze my privacy', action: 'aiSuggestImprovements' },
+        { text: 'Explain permissions', action: 'aiExplainPermissions' },
+        { text: 'New user guide', action: 'aiNewUserGuide' }
+      ]);
+    }
+
+    function aiSuggestImprovements() {
+      const highRiskApps = Object.entries(privacyState.apps).filter(([name, app]) => app.risk === 'high');
+      const currentScore = privacyState.currentScore;
+      const contextAwareCount = Object.values(privacyState.apps).reduce((total, app) => total + app.permissions.filter(p => p.contextAware).length, 0);
+      
+      let message = `Let me analyze your privacy setup and suggest improvements:
+
+📊 **Current Score**: ${currentScore}% (${currentScore >= 80 ? 'Excellent' : currentScore >= 60 ? 'Good' : 'Needs Improvement'})
+🎯 **Context-Aware Permissions**: ${contextAwareCount} enabled
+
+`;
+
+      if (highRiskApps.length > 0) {
+        message += `⚠️ **High Priority**: You have ${highRiskApps.length} high-risk app${highRiskApps.length > 1 ? 's' : ''}: ${highRiskApps.map(([name]) => name).join(', ')}
+
+🚀 **Quick Wins**:
+• Enable Privacy Mode to disable all high-risk permissions (+15-20 points)
+• Enable context-aware permissions for better control (+5-10 points)
+• Review location permissions for ${highRiskApps.filter(([name, app]) => app.permissions.some(p => p.name === 'Location' && p.enabled)).map(([name]) => name).join(', ') || 'apps'} (+5-10 points)
+• Disable unnecessary camera/microphone access (+5-8 points)
+
+💡 **Potential Score**: Up to ${Math.min(100, currentScore + 30)}% with these changes!`;
+      } else {
+        message += `✅ **Great Job**: No high-risk apps detected!
+
+🔧 **Fine-tuning suggestions**:
+• Enable more context-aware permissions for better control
+• Review medium-risk permissions
+• Check which apps access location in background
+• Consider disabling unused permissions
+
+You're already doing well with privacy protection!`;
+      }
+
+      addAiMessage(message, [
+        { text: 'Enable Privacy Mode', action: 'enablePrivacyMode' },
+        { text: 'Review all permissions', action: 'reviewPermissions' },
+        { text: 'Learn about context-aware', action: 'showPrivacyTips' }
+      ]);
+    }
+
+    function aiAnalyzeRisks() {
+      const highRiskPerms = [];
+      const mediumRiskPerms = [];
+      
+      for (const [appName, app] of Object.entries(privacyState.apps)) {
+        app.permissions.forEach(perm => {
+          if (perm.enabled) {
+            if (perm.risk === 'high') {
+              highRiskPerms.push(`${appName}: ${perm.name}${perm.contextAware ? ' (Context-Aware)' : ''}`);
+            } else if (perm.risk === 'medium') {
+              mediumRiskPerms.push(`${appName}: ${perm.name}${perm.contextAware ? ' (Context-Aware)' : ''}`);
+            }
+          }
+        });
+      }
+
+      let message = `🔍 **Privacy Risk Analysis**:
+
+🔴 **High Risk Permissions** (${highRiskPerms.length}):
+${highRiskPerms.length > 0 ? highRiskPerms.map(p => `• ${p}`).join('\n') : '• None detected ✅'}
+
+🟡 **Medium Risk Permissions** (${mediumRiskPerms.length}):
+${mediumRiskPerms.length > 0 ? mediumRiskPerms.slice(0, 5).map(p => `• ${p}`).join('\n') : '• None detected ✅'}
+${mediumRiskPerms.length > 5 ? `\n• ...and ${mediumRiskPerms.length - 5} more` : ''}
+
+**Risk Level Guide**:
+🔴 **High**: Location, Camera, Microphone - can reveal personal info
+🟡 **Medium**: Contacts, Phone - access to personal data
+🟢 **Low**: Storage - limited privacy impact
+
+🎯 **Context-Aware Bonus**: Permissions marked as "Context-Aware" are automatically restricted to specific use cases, reducing their risk profile.
+
+`;
+
+      if (highRiskPerms.length > 0) {
+        message += `⚠️ **Recommendation**: Focus on high-risk permissions first for maximum privacy improvement.`;
+      } else {
+        message += `✅ **Good news**: No high-risk permissions are currently enabled!`;
+      }
+
+      addAiMessage(message, [
+        { text: 'Fix high-risk issues', action: 'enablePrivacyMode' },
+        { text: 'Review all permissions', action: 'reviewPermissions' },
+        { text: 'Learn about context-aware', action: 'showPrivacyTips' }
+      ]);
+    }
+
+    function aiAnalyzeApps() {
+      const highRiskApps = Object.entries(privacyState.apps).filter(([name, app]) => app.risk === 'high');
+      const mediumRiskApps = Object.entries(privacyState.apps).filter(([name, app]) => app.risk === 'medium');
+      
+      let message = `📱 **Your App Analysis**:
+
+🔴 **High Risk Apps** (${highRiskApps.length}): ${highRiskApps.map(([name]) => name).join(', ') || 'None'}
+🟡 **Medium Risk Apps** (${mediumRiskApps.length}): ${mediumRiskApps.map(([name]) => name).join(', ') || 'None'}
+🟢 **Low Risk Apps**: ${Object.entries(privacyState.apps).filter(([name, app]) => app.risk === 'low').map(([name]) => name).join(', ') || 'None'}
+
+`;
+
+      if (highRiskApps.length > 0) {
+        const worstApp = highRiskApps.reduce((worst, [name, app]) => app.score < worst[1].score ? [name, app] : worst);
+        const contextAwareCount = worstApp[1].permissions.filter(p => p.contextAware).length;
+        message += `⚠️ **Most Concerning**: ${worstApp[0]} (${worstApp[1].score}% privacy score)
+• Has ${worstApp[1].permissions.filter(p => p.enabled && p.risk === 'high').length} high-risk permissions enabled
+• ${contextAwareCount} permissions are context-aware
+• Consider reviewing its permissions immediately
+
+🛡️ **Quick Fix**: Enable Privacy Mode to secure all high-risk apps at once.`;
+      } else {
+        message += `✅ **Excellent**: No high-risk apps detected! Your app permissions are well-managed.
+
+💡 **Maintenance tip**: Regularly review permissions when you install new apps or update existing ones.`;
+      }
+
+      addAiMessage(message, [
+        { text: 'Fix high-risk apps', action: 'enablePrivacyMode' },
+        { text: 'Review specific app', action: 'reviewPermissions' },
+        { text: 'Explain risk levels', action: 'aiAnalyzeRisks' }
+      ]);
+    }
+
+    function aiExplainPermissions() {
+      addAiMessage(`🔐 **Understanding App Permissions**:
+
+**What are permissions?**
+Permissions are like keys that apps ask for to access different parts of your device and data.
+
+**Main Permission Types**:
+
+📍 **Location** - Where you are
+• Apps can track your movements
+• Reveals home, work, daily routines
+• Use: Navigation, weather, local services
+
+📷 **Camera** - Take photos/videos
+• Can capture images anytime the app is open
+• Access to visual information
+• Use: Photo apps, video calls, QR scanners
+
+🎤 **Microphone** - Record audio
+• Can listen to conversations
+• Voice recognition and recording
+• Use: Calls, voice messages, voice assistants
+
+📞 **Contacts** - Your address book
+• Access to all contact information
+• Can upload to company servers
+• Use: Messaging, calling, social apps
+
+💾 **Storage** - Files and photos
+• Read/write access to your files
+• Can access existing photos/documents
+• Use: File managers, photo editors
+
+🎯 **PrivacyGuard Innovation**: Context-aware permissions only grant access when you're actively using related features, not just when the app is open!
+
+**Best Practice**: Only grant permissions that apps truly need for their core function!`, [
+        { text: 'Review my permissions', action: 'reviewPermissions' },
+        { text: 'Which apps need what?', action: 'aiAnalyzeApps' },
+        { text: 'Learn about context-aware', action: 'showPrivacyTips' }
+      ]);
+    }
+
+    // App rendering
+    function renderApps() {
+      const appsGrid = document.getElementById('appsGrid');
+      appsGrid.innerHTML = '';
+      
+      for (const [appName, app] of Object.entries(privacyState.apps)) {
+        const appCard = document.createElement('div');
+        appCard.className = 'app-card';
+        appCard.setAttribute('data-app', appName);
+        appCard.onclick = () => openAppModal(appName);
+        
+        const contextAwareCount = app.permissions.filter(p => p.contextAware).length;
+        const contextAwareBadge = contextAwareCount > 0 ? 
+          `<div style="position: absolute; top: 0.5rem; left: 0.5rem; background: var(--success-color); color: white; border-radius: 12px; padding: 0.25rem 0.5rem; font-size: 0.6rem; font-weight: 600;">
+            <i class="fas fa-magic"></i> ${contextAwareCount}
+          </div>` : '';
+        
+        appCard.innerHTML = `
+          <div class="app-status ${app.active ? 'active' : ''}"></div>
+          ${contextAwareBadge}
+          <div class="app-icon">
+            <i class="fas ${app.icon}"></i>
+          </div>
+          <div class="app-name">${appName}</div>
+          <div class="app-risk risk-${app.risk}">${app.risk} risk</div>
+        `;
+        
+        appsGrid.appendChild(appCard);
+      }
+    }
+
+    // Event listeners
+    function initEventListeners() {
+      // Dark mode toggle
+      document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+      
+      // Notification button
+      document.getElementById('notificationBtn').addEventListener('click', openNotifications);
+      
+      // Export button
+      document.getElementById('exportBtn').addEventListener('click', exportData);
+      
+      // Settings button
+      document.getElementById('settingsBtn').addEventListener('click', openSettings);
+      
+      // AI Assistant
+      document.getElementById('aiToggle').addEventListener('click', toggleAiAssistant);
+      document.getElementById('aiClose').addEventListener('click', toggleAiAssistant);
+      document.getElementById('aiSend').addEventListener('click', sendAiMessage);
+      document.getElementById('aiInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendAiMessage();
+        }
+      });
+      
+      // Save permissions button
+      document.getElementById('savePermissionsBtn').addEventListener('click', savePermissionChanges);
+      
+      // Close modals when clicking outside
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal') || e.target.classList.contains('custom-modal')) {
+          e.target.classList.remove('active');
+        }
+      });
+    }
+
+    // Initialize the application
+    function init() {
+      console.log('PrivacyGuard Framework Initializing...');
+      
+      // Render initial state
+      renderApps();
+      updateStats();
+      updatePrivacyTip();
+      initChart();
+      
+      // Set up event listeners
+      initEventListeners();
+      
+      // Add initial chart data point
+      updateChart();
+      
+      // Show welcome toast
+      showToast('PrivacyGuard Loaded', 'Your privacy protection framework is now active.', 'success');
+      
+      console.log('PrivacyGuard Framework Ready');
+    }
+
+    // Start the application when DOM is loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   </script>
 </body>
 </html>
