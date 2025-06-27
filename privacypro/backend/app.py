@@ -20,6 +20,11 @@ MESSAGES = [
     }
 ]
 
+# ✅ Redirect '/' to login page
+@app.route('/')
+def home_redirect():
+    return redirect(url_for('login_page'))
+
 @app.route('/index', methods=['GET'])
 def landing_page():
     if request.method == 'GET':
@@ -36,16 +41,15 @@ def sign_up_page():
         return render_template('signup.html')
 
 @app.route("/submit", methods=["POST"])
-
 def submit():
     data = request.get_json()
-
     email = data.get("email")
     password = data.get("password")
 
     print(email)
 
-    with open(USERS_FILE, "r", encoding="utf-8") as f: data = json.load(f)
+    with open(USERS_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
     auth_email = data[0]["email"]
 
@@ -60,14 +64,13 @@ def submit():
 @app.route("/sign-up", methods=["POST"])
 def sign_up():
     data = request.get_json()
-
     full_name = data.get("full_name")
     signup_email = data.get("signup_email")
     signup_pwd = data.get("signup_pwd")
     confirm_pwd = data.get("confirm_pwd")
 
-
-    with open(USERS_FILE, "r", encoding="utf-8") as f: data = json.load(f)
+    with open(USERS_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
     new_user = {
         'id': len(data) + 1,
@@ -81,7 +84,8 @@ def sign_up():
 
     data.append(new_user)
 
-    with open(USERS_FILE, "w") as file: json.dump(data, file, indent=4)
+    with open(USERS_FILE, "w") as file:
+        json.dump(data, file, indent=4)
 
     return jsonify({'message': 'User registered successfully.', 'email': signup_email})
 
@@ -90,7 +94,6 @@ def dashboard_page():
     if request.method == 'GET':
         return render_template('dashboard.html')
 
-        
 @app.route('/detail/<int:msg_id>')
 def detail(msg_id):
     message = next((m for m in MESSAGES if m['id'] == msg_id), None)
@@ -100,7 +103,3 @@ def detail(msg_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-

@@ -43,5 +43,14 @@
         "is_admin": false,
         "email_verified": false,
         "created_at": "2025-05-28T19:08:00.365276"
+    },
+    {
+        "id": 6,
+        "username": "Muhammad Abass",
+        "email": "maxmcgrath207@gmail.com",
+        "password": "12345678",
+        "is_admin": false,
+        "email_verified": false,
+        "created_at": "2025-06-27T16:38:41.142090"
     }
 ]

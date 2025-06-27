@@ -2887,7 +2887,7 @@
       
       toast.innerHTML = `
         <div class="toast-icon ${type}">
-          <i class="fas ${iconClass}"></i>
+          <i class="fas ${iconClass}"></i> 
         </div>
         <div class="toast-content">
           <div class="toast-title">${title}</div>
@@ -2896,6 +2896,7 @@
         <button class="toast-close" onclick="this.parentElement.remove()">
           <i class="fas fa-times"></i>
         </button>
+        <div class="toast-timer"></div> <!-- 🔥 New shrinking bar -->
       `;
       
       toastContainer.appendChild(toast);
@@ -2905,7 +2906,7 @@
         if (toast.parentElement) {
           toast.remove();
         }
-      }, 5000);
+      }, 4000);
     }
 
     // Notification functions
